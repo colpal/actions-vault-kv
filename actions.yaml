@@ -1,0 +1,13 @@
+---
+name: 'Secret'
+description: 'Gets the secret from vault'
+inputs: 
+  path: 
+    description: 'path to secret'
+    required: true
+outputs:
+  creds: 
+    description: 'credentials from vault'
+runs:
+  using: 'node12'
+  main: 'index.js'
