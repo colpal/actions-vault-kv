@@ -1,0 +1,17 @@
+---
+name: 'Test'
+on: push
+
+jobs:
+  get_secrets:
+    runs-on: ubuntu-latest
+    name: An action to get secrets
+    steps:
+    - name: Get secrets
+      id: secret
+      uses: actions/actions-vault-kv@v0.1
+      with:
+        path: '/secret/teams/intern-training'
+
+    - name: Get the output time
+      run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
