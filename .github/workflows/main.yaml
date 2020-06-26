@@ -1,17 +1,17 @@
----
-name: 'Test'
-on: push
+on: [push]
 
 jobs:
   get_secrets:
     runs-on: ubuntu-latest
     name: An action to get secrets
     steps:
-    - name: Get secrets
-      id: secret
-      uses: actions/checkout@v2
-      with:
-        vaultPath: '/secret/teams/intern-training'
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get secrets
+        uses: ./
+        id: secret
+        with:
+          vaultPath: '/secret/teams/intern-training'
 
-    - name: Get the output time
-      run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
+      - name: Get the output creds
+        run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"

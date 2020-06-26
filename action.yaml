@@ -1,7 +1,7 @@
 ---
 name: 'Secret'
-description: 'Gets the secret from vault'
-inputs: 
+description: 'Get secrets from vault'
+inputs:
   vaultPath: 
     description: 'path to secret'
     required: true
