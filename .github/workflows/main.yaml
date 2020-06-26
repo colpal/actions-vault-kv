@@ -7,6 +7,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Get secrets
         uses: ./
         id: secret
@@ -15,3 +16,6 @@ jobs:
 
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
+
+      - name: Checking vault connection
+        run: vault status
