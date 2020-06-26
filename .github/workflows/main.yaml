@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Get secrets
       id: secret
-      uses: actions/actions-vault-kv@v0.1
+      uses: actions/checkout@v2
       with:
         path: '/secret/teams/intern-training'
 
