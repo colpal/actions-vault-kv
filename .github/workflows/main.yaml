@@ -11,7 +11,7 @@ jobs:
       id: secret
       uses: actions/checkout@v2
       with:
-        path: '/secret/teams/intern-training'
+        vaultPath: '/secret/teams/intern-training'
 
     - name: Get the output time
       run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
