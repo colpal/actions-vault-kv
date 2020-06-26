@@ -2,7 +2,7 @@ on: [push]
 
 jobs:
   get_secrets:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: An action to get secrets
     steps:
       - name: Checkout
