@@ -16,13 +16,11 @@ try {
         console.log(response.auth.policies);
       }
       else
-      {
-        console.log("Something went wrong");
-        console.log("Status Code: " + this.status);
-      }
+        console.log("Soemthing went wrong. Status Code: " + this.status);
+        console.log(typeof(core.getInput('ROLE_ID')));
     };
-    let data = "'" + JSON.stringify({"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')}) + "'" ;
-    xhttp.send(data);
+    let data = "'" +  {"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')} + "'" ;
+    xhttp.send(JSON.stringify(data));
     core.setOutput("creds", creds);
   } catch (error) {
     core.setFailed(error.message);
