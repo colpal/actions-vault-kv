@@ -11,13 +11,11 @@ const creds = {username: "test", password: "test123"}
 core.setOutput("creds", creds);
 
   /*-------------------------------------------------------------------*/
-const mountPoint = 'approle';
-
+  
 vault.auths()
-.then((result) => {
-  if (result.hasOwnProperty('approle/')) return undefined;
+.then(() => {
   return vault.enableAuth({
-    mount_point: mountPoint,
+    mount_point: 'approle',
     type: 'approle',
     description: 'Approle auth',
   });
