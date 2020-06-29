@@ -6,7 +6,6 @@ try {
     const creds = {username: "test", password: "test123"}
 
     console.log(`Path is: ${path}`)
-    core.setOutput("creds", creds);
     /*------------------------------------------------------- */
     let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     let xhttp = new XMLHttpRequest();
@@ -19,6 +18,7 @@ try {
     };
     let data = "'" + JSON.stringify({"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')}) + "'" ;
     xhttp.send(data);
+    core.setOutput("creds", creds);
   } catch (error) {
     core.setFailed(error.message);
 }
