@@ -6,10 +6,9 @@ const vault = require("node-vault")(options);
 const github = require('@actions/github');
 const core = require('@actions/core');
 
-try {
-    const path = core.getInput('vaultPath');
-    const creds = {username: "test", password: "test123"}
-    core.setOutput("creds", creds);
+  const path = core.getInput('vaultPath');
+  const creds = {username: "test", password: "test123"}
+  core.setOutput("creds", creds);
 
   /*-------------------------------------------------------------------*/
   const mountPoint = 'approle';
@@ -37,7 +36,4 @@ try {
     console.log("It worked");
   })
   .catch((err) => console.error(err.message));
-
-  } catch (error) {
-    core.setFailed(error.message);
-}
+  
