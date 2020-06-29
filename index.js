@@ -7,7 +7,7 @@ try {
     const creds = {username: "test", password: "test123"}
 
     console.log(`Path is: ${path}`)
-    shell.exec('./login.sh' + core.getInput('ROLE_ID'))
+    shell.exec('./login.sh ' + core.getInput('ROLE_ID'))
     core.setOutput("creds", creds);
 
   } catch (error) {
