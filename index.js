@@ -9,20 +9,13 @@ try {
     /*------------------------------------------------------- */
     let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     let xhttp = new XMLHttpRequest();
-    try
-    {
-      xhttp.open('POST', "https://vault.colpal.cloud/v1/auth/approle/login", false);  // `false` makes the request synchronous
-      let data = "'" +  {"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')} + "'" ;
-      xhttp.send(data);
+    xhttp.open('POST', "https://vault.colpal.cloud/v1/auth/approle/login", false);  // `false` makes the request synchronous
+    let data = "'" +  {"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')} + "'" ;
+    xhttp.send(data);
 
-      if (xhttp.status === 200) {
-        let response = JSON.parse(xhttp.responseText);
-        console.log(response.auth.policies);
-      }
-    }
-    catch(e)
-    {
-      console.log(e);
+    if (xhttp.status === 200) {
+      let response = JSON.parse(xhttp.responseText);
+      console.log(response.auth.policies);
     }
     core.setOutput("creds", creds);
 
