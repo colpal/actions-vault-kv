@@ -15,6 +15,11 @@ try {
         let response = JSON.parse(this.responseText);
         console.log(response.auth.policies);
       }
+      else
+      {
+        console.log("Something went wrong");
+        console.log("Status Code: " + this.status);
+      }
     };
     let data = "'" + JSON.stringify({"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')}) + "'" ;
     xhttp.send(data);
