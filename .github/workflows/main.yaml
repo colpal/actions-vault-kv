@@ -12,10 +12,9 @@ jobs:
         uses: ./
         id: secret
         with:
-          vaultPath: '/secret/teams/intern-training'
+          ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19ff
+          SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
+          vaultPath: '/secret/hello-world'
 
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
-
-      - name: Checking vault connection
-        run: vault status
