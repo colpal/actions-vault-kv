@@ -6,7 +6,8 @@
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
-    "node-vault": "^0.9.18"
+    "node-vault": "^0.9.18",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {},
   "scripts": {
