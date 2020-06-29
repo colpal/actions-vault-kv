@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^4.0.0",
     "node-vault": "^0.9.18"
   },
   "devDependencies": {},
