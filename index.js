@@ -24,12 +24,16 @@ vault.auths()
   });
 })
 .then(() => vault.addApproleRole({ role_name: roleName, policies: 'hello-world' }))
-
 .then(() => {
   const roleId = core.getInput('ROLE_ID');
   const secretId = core.getInput('SECRET_ID');
   return vault.approleLogin({ role_id: roleId, secret_id: secretId });
 })
-.then((result) => {
+.then(() => {
   console.log("It worked");
+})
+.catch((result) => {
+  console.log("Could not log in")
+  console.log(result)
+  process.exit(1);
 })
