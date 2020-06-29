@@ -9,7 +9,7 @@ try {
     /*------------------------------------------------------- */
     let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "https://vault.colpal.cloud/", true); 
+    xhttp.open("POST", "https://vault.colpal.cloud/v1/auth/approle/login", true); 
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         let response = JSON.parse(this.responseText);
@@ -17,7 +17,6 @@ try {
       }
       else
         console.log("Soemthing went wrong. Status Code: " + this.status);
-        console.log(typeof(core.getInput('ROLE_ID')));
     };
     let data = "'" +  {"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')} + "'" ;
     xhttp.send(JSON.stringify(data));
