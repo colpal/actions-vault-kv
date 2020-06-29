@@ -35,5 +35,4 @@ const core = require('@actions/core');
   .then((result) => {
     console.log("It worked");
   })
-  .catch((err) => console.error(err.message));
   
