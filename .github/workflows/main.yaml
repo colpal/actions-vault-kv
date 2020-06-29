@@ -18,3 +18,7 @@ jobs:
 
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
+        
+      - uses: colpal/actions-clean@v1.0.2
+        if: ${{ always() }}
+        
