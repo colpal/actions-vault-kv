@@ -7,7 +7,8 @@
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
     "node-vault": "^0.9.18",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {},
   "scripts": {
