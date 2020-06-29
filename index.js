@@ -12,7 +12,6 @@ core.setOutput("creds", creds);
 
   /*-------------------------------------------------------------------*/
 const mountPoint = 'approle';
-const roleName = 'hello-world';
 
 vault.auths()
 .then((result) => {
@@ -23,7 +22,6 @@ vault.auths()
     description: 'Approle auth',
   });
 })
-.then(() => vault.addApproleRole({ role_name: roleName, policies: 'hello-world' }))
 .then(() => {
   const roleId = core.getInput('ROLE_ID');
   const secretId = core.getInput('SECRET_ID');
