@@ -27,8 +27,9 @@ try {
       console.log(`statusCode: ${res.statusCode}`)
     
       res.on('data', (d) => {
+        d = JSON.parse(d);
         console.log("It worked succesfully");
-        console.log("Type of: " + typeof((JSON.parse(d)).auth.policies));
+        console.log(d.auth.policies);
       })
     })
     
