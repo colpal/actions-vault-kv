@@ -48,7 +48,7 @@ try {
         
         res.on('data', (d) => {
           const secret = JSON.parse(d);
-          console.log(req2.hostname+req2.path);
+          console.log(req2.path);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
           console.log(secret);
