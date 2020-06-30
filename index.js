@@ -43,11 +43,11 @@ try {
           }
         }
         const req2 = https.request(secretOptions, (res) => {
-        console.log(`statusCode: ${res.statusCode}`)
+        console.log(`\nstatusCode: ${res.statusCode}`)
         
         res.on('data', (d) => {
           const secret = JSON.parse(d);
-          secret.errors && process.exit(1);
+          secret.errors && (console.log("\nVault path: " + vaultPath + " not found") || process.exit(1));
           console.log("Secret opened!");
           console.log(secret);
           })
