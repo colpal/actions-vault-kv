@@ -9,7 +9,7 @@ try {
 
     console.log(`Path is: ${vaultPath}`)
 
-/*-------------------Get Token----------------------------------- */
+/*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
       role_id: core.getInput('ROLE_ID'), 
@@ -46,8 +46,10 @@ try {
         console.log(`statusCode: ${res.statusCode}`)
         
         res.on('data', (d) => {
+          const secret = JSON.parse(d);
+          secret.errors && process.exit(1);
           console.log("Secret opened!");
-          console.log(JSON.parse(d));
+          console.log(secret);
           })
         })
         
