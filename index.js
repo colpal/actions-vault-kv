@@ -1,18 +1,21 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
+let token;
 
 try {
-    const path = core.getInput('vaultPath');
+    const vaultPath = core.getInput('vaultPath');
     const creds = {username: "test", password: "test123"}
 
-    console.log(`Path is: ${path}`)
-    /*------------------------------------------------------- */
+    console.log(`Path is: ${vaultPath}`)
+
+/*-------------------Get Token----------------------------------- */
+
     const data = JSON.stringify({
       role_id: core.getInput('ROLE_ID'), 
       secret_id: core.getInput('SECRET_ID')
     })
-    const options = {
+    const tokenOptions = {
       hostname: 'vault.colpal.cloud',
       port: 443,
       path: '/v1/auth/approle/login',
@@ -23,24 +26,51 @@ try {
       }
     }
 
-    const req = https.request(options, (res) => {
+    let req = https.request(tokenOptions, (res) => {
       console.log(`statusCode: ${res.statusCode}`)
     
       res.on('data', (d) => {
-        d = JSON.parse(d);
-        console.log("It worked succesfully");
-        console.log(d.auth.policies);
+        token = JSON.parse(d).auth.client_token;
+        console.log("Login successful!");
       })
     })
     
     req.on('error', (error) => {
       console.error(error)
+      req.end()
+      process.exit(1);
     })
-    
     req.write(data)
     req.end()
 
-    core.setOutput("creds", creds);
+/*----------------------Get Secret----------------------------------- */
+  const secretOptions = {
+    hostname: 'vault.colpal.cloud',
+    port: 443,
+    path: '/v1' + vaultPath + '?list=true',
+    method: 'GET',
+    headers: {
+      'X-Vault-Token' : token
+    }
+  }
+  req = https.request(secretOptions, (res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  
+  res.on('data', (d) => {
+    console.log("Secret opened!");
+    console.log(JSON.parse(d));
+    })
+  })
+  
+  req.on('error', (error) => {
+    console.error(error)
+    req.end()
+    process.exit(1);
+  })
+  req.write(data)
+  req.end()
+
+  core.setOutput("creds", creds);
 
   } catch (error) {
     core.setFailed(error.message);
