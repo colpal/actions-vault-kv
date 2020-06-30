@@ -39,7 +39,8 @@ try {
           path: '/v1' + vaultPath + '?list=true',
           method: 'GET',
           headers: {
-            'X-Vault-Token' : token
+            'X-Vault-Token' : token,
+            'Content-Type': 'application/json'
           }
         }
         const req2 = https.request(secretOptions, (res) => {
