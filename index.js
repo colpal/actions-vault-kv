@@ -47,7 +47,7 @@ try {
         
         res.on('data', (d) => {
           const secret = JSON.parse(d);
-          secret.errors && (console.log("Vault path: " + vaultPath + " not found") || process.exit(1));
+          secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
           console.log(secret);
           })
