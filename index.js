@@ -26,15 +26,40 @@ try {
       }
     }
 
-    let req = https.request(tokenOptions, (res) => {
+    const req = https.request(tokenOptions, (res) => {
       console.log(`statusCode: ${res.statusCode}`)
     
       res.on('data', (d) => {
         token = JSON.parse(d).auth.client_token;
         console.log("Login successful!");
+
+        const secretOptions = {
+          hostname: 'vault.colpal.cloud',
+          port: 443,
+          path: '/v1' + vaultPath + '?list=true',
+          method: 'GET',
+          headers: {
+            'X-Vault-Token' : token
+          }
+        }
+        const req2 = https.request(secretOptions, (res) => {
+        console.log(`statusCode: ${res.statusCode}`)
+        
+        res.on('data', (d) => {
+          console.log("Secret opened!");
+          console.log(JSON.parse(d));
+          })
+        })
+        
+        req2.on('error', (error) => {
+          console.error(error)
+          req2.end()
+          process.exit(1);
+        })
+        req2.write(data)
+        req2.end()
       })
     })
-    
     req.on('error', (error) => {
       console.error(error)
       req.end()
@@ -42,33 +67,6 @@ try {
     })
     req.write(data)
     req.end()
-
-/*----------------------Get Secret----------------------------------- */
-  const secretOptions = {
-    hostname: 'vault.colpal.cloud',
-    port: 443,
-    path: '/v1' + vaultPath + '?list=true',
-    method: 'GET',
-    headers: {
-      'X-Vault-Token' : token
-    }
-  }
-  req = https.request(secretOptions, (res) => {
-  console.log(`statusCode: ${res.statusCode}`)
-  
-  res.on('data', (d) => {
-    console.log("Secret opened!");
-    console.log(JSON.parse(d));
-    })
-  })
-  
-  req.on('error', (error) => {
-    console.error(error)
-    req.end()
-    process.exit(1);
-  })
-  req.write(data)
-  req.end()
 
   core.setOutput("creds", creds);
 
