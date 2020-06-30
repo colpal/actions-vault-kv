@@ -28,7 +28,7 @@ try {
     
       res.on('data', (d) => {
         console.log("It worked succesfully");
-        console.log("Type of: " + typeof(JSON.parse(d)));
+        console.log("Type of: " + typeof((JSON.parse(d)).auth.policies));
       })
     })
     
