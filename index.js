@@ -1,5 +1,6 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
+const https = require('https');
 
 try {
     const path = core.getInput('vaultPath');
@@ -7,16 +8,37 @@ try {
 
     console.log(`Path is: ${path}`)
     /*------------------------------------------------------- */
-    let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-    let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', "https://vault.colpal.cloud/v1/auth/approle/login", false);  // `false` makes the request synchronous
-    let data = "'" +  {"role_id": core.getInput('ROLE_ID'), "secret_id": core.getInput('SECRET_ID')} + "'" ;
-    xhttp.send(data);
-
-    if (xhttp.status === 200) {
-      let response = JSON.parse(xhttp.responseText);
-      console.log(response.auth.policies);
+    const data = JSON.stringify({
+      role_id: core.getInput('ROLE_ID'), 
+      secret_id: core.getInput('SECRET_ID')
+    })
+    const options = {
+      hostname: 'vault.colpal.cloud',
+      port: 443,
+      path: '/v1/auth/approle/login',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': data.length
+      }
     }
+
+    const req = https.request(options, (res) => {
+      console.log(`statusCode: ${res.statusCode}`)
+    
+      res.on('data', (d) => {
+        console.log("It worked succesfully");
+        console.log("Type of: " + typeof(JSON.parse(d)));
+      })
+    })
+    
+    req.on('error', (error) => {
+      console.error(error)
+    })
+    
+    req.write(data)
+    req.end()
+
     core.setOutput("creds", creds);
 
   } catch (error) {
