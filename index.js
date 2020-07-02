@@ -57,8 +57,8 @@ try {
             returnVal = secret.data.data.temp;
           }
           console.log(returnVal);
-          console.log(vaultPath[1]);
-          console.log(secret.data.data);
+          console.log(vaultPath[1] + " typeof: " + typeof(vaultPath[1]));
+          console.log(JSON.parse(secret.data.data));
           })
         })
         
