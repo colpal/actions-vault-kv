@@ -4,10 +4,10 @@ const https = require('https');
 let token;
 
 try {
-    const vaultPath = core.getInput('vaultPath');
+    const vaultPath = core.getInput('vaultPath').split(",");
     const creds = {username: "test", password: "test123"}
 
-    console.log(`Path is: ${vaultPath}`)
+    console.log(`Passed in: ${vaultPath}`)
 
 /*-------------------Get token and secret----------------------------------- */
 
@@ -48,7 +48,6 @@ try {
         
         res.on('data', (d) => {
           const secret = JSON.parse(d);
-          console.log(req2.path);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
           console.log(secret);
