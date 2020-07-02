@@ -8,6 +8,8 @@ try {
     core.getInput('vaultPath').split(",").forEach(i => {
         vaultPath.push(i.trim());
     });
+
+    let returnVal;
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
@@ -49,9 +51,8 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
-          let temp;
-          vaultPath.length == 2 ? temp = vaultPath[1] && core.setOutput("creds", secret.data.data.temp) : null
-
+          returnVal = vaultPath.length == 2 ? secret.data.data.vaultPath[1] : ""
+          console.log(returnVal);
           })
         })
         
@@ -71,7 +72,7 @@ try {
     })
     req.write(data)
     req.end()
-
+    core.setOutput("creds", returnVal);
   } catch (error) {
     core.setFailed(error.message);
 }
