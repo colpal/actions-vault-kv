@@ -9,7 +9,7 @@ try {
         vaultPath.push(i.trim());
     });
 
-    vaultPath.forEach(val, i => {
+    vaultPath.forEach((val, i) => {
       console.log("i: " + i + " val: " + val);
     })
 /*-------------------Get token and secret----------------------------------- */
