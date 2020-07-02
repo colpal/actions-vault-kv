@@ -36,7 +36,7 @@ try {
         const secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
-          path: '/v1' + vaultPath,
+          path: '/v1' + vaultPath[0],
           method: 'GET',
           headers: {
             'X-Vault-Token' : token,
