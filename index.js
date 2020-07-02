@@ -5,7 +5,7 @@ let token;
 
 try {
     let vaultPath = [];
-    vaultPath = core.getInput('vaultPath').split(",").forEach(i => {
+    core.getInput('vaultPath').split(",").forEach(i => {
         vaultPath.push(i.trim());
     });
     const creds = {username: "test", password: "test123"}
