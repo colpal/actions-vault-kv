@@ -8,10 +8,6 @@ try {
     core.getInput('vaultPath').split(",").forEach(i => {
         vaultPath.push(i.trim());
     });
-    const creds = {username: "test", password: "test123"}
-
-    console.log(`Passed in: ${vaultPath}`)
-
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
@@ -53,6 +49,7 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
+          vaultPath.length == 2 && core.setOutput("creds", secret.data.data.vaultPath[1])
           })
         })
         
