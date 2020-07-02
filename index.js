@@ -4,7 +4,10 @@ const https = require('https');
 let token;
 
 try {
-    const vaultPath = core.getInput('vaultPath').split(",");
+    let vaultPath = [];
+    vaultPath = core.getInput('vaultPath').split(",").forEach(i => {
+        vaultPath.push(i.trim());
+    });
     const creds = {username: "test", password: "test123"}
 
     console.log(`Passed in: ${vaultPath}`)
@@ -50,7 +53,6 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
-          console.log(secret);
           })
         })
         
