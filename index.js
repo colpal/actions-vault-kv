@@ -8,10 +8,6 @@ try {
     core.getInput('vaultPath').split(",").forEach(i => {
         vaultPath.push(i.trim());
     });
-
-    vaultPath.forEach((val, i) => {
-      console.log("i: " + i + " val: " + val);
-    })
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
@@ -53,7 +49,9 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
-          vaultPath.length == 2 && core.setOutput("creds", secret.data.data.vaultPath[1])
+          let temp;
+          vaultPath.length == 2 ? temp = vaultPath[1] && core.setOutput("creds", secret.data.data.temp) : null
+
           })
         })
         
