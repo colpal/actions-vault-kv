@@ -56,9 +56,7 @@ try {
             temp = JSON.parse(JSON.stringify(secret.data.data));
             returnVal = temp.vaultPath[1];
           }
-          console.log(returnVal);
           console.log(temp);
-          console.log(vaultPath[1] + " typeof: " + typeof(vaultPath[1]));
           })
         })
         
