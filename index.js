@@ -57,6 +57,8 @@ try {
             returnVal = secret.data.data.temp;
           }
           console.log(returnVal);
+          console.log(vaultPath[1]);
+          console.log(secret.data.data);
           })
         })
         
