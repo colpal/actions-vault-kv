@@ -9,7 +9,7 @@ try {
         vaultPath.push(i.trim());
     });
 
-    let returnVal;
+    let returnVal = "";
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
@@ -54,7 +54,6 @@ try {
           let temp;
           if (vaultPath.length == 2){
             temp = JSON.parse(JSON.stringify(secret.data.data));
-            returnVal = temp.vaultPath[1];
           }
           console.log(temp);
           })
