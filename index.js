@@ -51,11 +51,8 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
-          let temp;
-          if (vaultPath.length == 2){
-            temp = JSON.parse(JSON.stringify(secret.data.data));
-          }
-          console.log(temp);
+          returnVal = vaultPath.length == 2 ? secret.data.data[vaultPath[1]] : "null"
+          console.log(returnVal);
           })
         })
         
