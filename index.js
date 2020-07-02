@@ -8,6 +8,10 @@ try {
     core.getInput('vaultPath').split(",").forEach(i => {
         vaultPath.push(i.trim());
     });
+
+    vaultPath.forEach(val, i => {
+      console.log("i: " + i + " val: " + val);
+    })
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
@@ -69,7 +73,7 @@ try {
     })
     req.write(data)
     req.end()
-    
+
   } catch (error) {
     core.setFailed(error.message);
 }
