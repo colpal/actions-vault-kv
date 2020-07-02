@@ -49,7 +49,7 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
-          vaultPath.length == 2 && core.setOutput("creds", secret.data.data)
+          vaultPath.length == 2 && core.setOutput("creds", secret.data.data.vaultPath[1])
           })
         })
         
@@ -69,9 +69,7 @@ try {
     })
     req.write(data)
     req.end()
-
-  core.setOutput("creds", creds);
-
+    
   } catch (error) {
     core.setFailed(error.message);
 }
