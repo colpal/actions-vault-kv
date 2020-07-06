@@ -7,16 +7,19 @@ try {
     let vaultPath = [];
     let paths = {};
     let currentPath = "";
-    let tempArray = [];
     core.getInput('vaultPath').split(",").forEach((param, i) => {
         vaultPath.push(param.trim());
         if (param.includes("/")){
           currentPath = param;  
-          paths[currentPath] = tempArray;
+          paths.currentPath = [];
         }
         else 
+        {
           console.log(paths);
-          paths[currentPath] = paths[currentPath].push(param.trim());
+          paths[currentPath].push(param.trim());
+          console.log(paths);
+          break;
+        }
     });
     console.log(paths);
 /*-------------------Get token and secret----------------------------------- */
