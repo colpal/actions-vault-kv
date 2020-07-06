@@ -4,7 +4,6 @@ const https = require('https');
 let token;
 
 try {
-    let vaultPath = [];
     let paths = {};
     let currentPath = "";
     core.getInput('vaultPath').split(",").forEach((param, i) => {
@@ -41,22 +40,20 @@ try {
         token = JSON.parse(d).auth.client_token;
         console.log("Login successful!");
 
-        for (let i = 0; i < vaultPath; i++)
+        for (onePath in paths)
         {
           let secretOptions = {};
-          if(vaultPath[i].includes("/"))
-          {
             secretOptions = {
               hostname: 'vault.colpal.cloud',
               port: 443,
-              path: '/v1' + vaultPath[i],
+              path: '/v1' + onePath,
               method: 'GET',
               headers: {
                 'X-Vault-Token' : token,
                 'Content-Type': 'application/json'
               }
             }
-
+            console.log("OnePath: " + onePath);
             let req2 = https.request(secretOptions, (res) => {
             console.log(`\nstatusCode: ${res.statusCode}`)
             
@@ -65,20 +62,17 @@ try {
               secret.errors && (console.log(secret) || process.exit(1));
               console.log("Secret opened!");
           
-              if(vaultPath.length == 1)
+              if(paths[onePath].length == 0)
                 core.setOutput("creds", secret.data.data);
-              else if (vaultPath.length == 2)
-                core.setOutput("creds",secret.data.data[vaultPath[1]])
-              else {
+              else
+              {
                 let returnCreds = {};
-                for (let k = 1; k < vaultPath.length; k++){
-                  returnCreds[vaultPath[k]] = secret.data.data[vaultPath[k]];
-                }
-                core.setOutput("creds",returnCreds)
+                for (let k = 0; k < paths[onePath].length; k++)
+                  returnCreds[paths[onePath][k]] = secret.data.data[paths[onePath[k]]];
+                core.setOutput("creds", returnCreds);
               }
-              })
             })
-            
+          })     
             req2.on('error', (error) => {
               console.error(error)
               req2.end()
@@ -86,9 +80,7 @@ try {
             })
             req2.write(data)
             req2.end()
-          }
         }
-
       })
     })
     req.on('error', (error) => {
