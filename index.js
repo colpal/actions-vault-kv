@@ -1,6 +1,7 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 let token;
 
 try {
@@ -51,7 +52,18 @@ try {
           const secret = JSON.parse(d);
           secret.errors && (console.log(secret) || process.exit(1));
           console.log("Secret opened!");
-          vaultPath.length == 2 ? core.setOutput("creds",secret.data.data[vaultPath[1]]) : core.setOutput("creds", secret.data.data)
+      
+          if (vaultPath.length == 2)
+            core.setOutput("creds",secret.data.data[vaultPath[1]])
+          else {
+            let returnCreds = {};
+            for (let i = 1; i < vaultPath.length; i++){
+              returnCreds[vaultPath[i]] = secret.data.data[vaultPath[i]];
+            }
+            core.setOutput("creds",returnVal)
+          }
+
+          core.setOutput("creds", secret.data.data)
           })
         })
         
