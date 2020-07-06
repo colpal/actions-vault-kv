@@ -63,14 +63,14 @@ try {
           
               if(paths[onePath].length <= 1)
               {
-                paths[onePath].length == 0 ? core.setOutput("creds", secret.data.data) : core.setOutput("creds", secret.data.data[paths[onePath][k]]) 
+                paths[onePath].length == 0 ? core.setOutput("creds", secret.data.data) : core.setOutput("creds", secret.data.data[paths[onePath][1]]) 
               }
               else
               {
                 let returnCreds = {};
                 for (let k = 0; k < paths[onePath].length; k++)
                 {
-                  returnCreds[paths[onePath][k]] = secret.data.data[paths[onePath][1]];
+                  returnCreds[paths[onePath][k]] = secret.data.data[paths[onePath][k]];
                 }
                 console.log(returnCreds);
                 core.setOutput("creds", returnCreds);
