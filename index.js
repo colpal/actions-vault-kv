@@ -11,7 +11,7 @@ try {
         vaultPath.push(param.trim());
         if (param.includes("/")){
           currentPath = param;  
-          paths.currentPath = [];
+          paths[currentPath] = [];
         }
         else 
         {
