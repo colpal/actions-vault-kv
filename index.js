@@ -18,7 +18,6 @@ try {
           console.log(paths);
           paths[currentPath].push(param.trim());
           console.log(paths);
-          break;
         }
     });
     console.log(paths);
