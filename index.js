@@ -63,7 +63,7 @@ try {
           
               if(paths[onePath].length <= 1)
               {
-                paths[onePath].length == 0 ? core.setOutput("creds", secret.data.data) : core.setOutput("creds", secret.data.data[paths[onePath][1]]) 
+                paths[onePath].length == 0 ? core.setOutput("creds", secret.data.data) : core.setOutput("creds", secret.data.data[paths[onePath][0]]) 
               }
               else
               {
