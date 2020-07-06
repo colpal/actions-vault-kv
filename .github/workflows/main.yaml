@@ -16,7 +16,9 @@ jobs:
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
           vaultPath: '/secret/data/hello-world,
                       hello,
-                      /secret/data/dummy-path'
+                      /secret/data/dummy-path, 
+                      dummy1,
+                      dummy2'
 
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
