@@ -14,11 +14,7 @@ try {
           paths[currentPath] = [];
         }
         else 
-        {
-          console.log(paths);
           paths[currentPath].push(param.trim());
-          console.log(paths);
-        }
     });
     console.log(paths);
 /*-------------------Get token and secret----------------------------------- */
