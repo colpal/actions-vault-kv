@@ -67,7 +67,12 @@ try {
               {
                 let returnCreds = {};
                 for (let k = 0; k < paths[onePath].length; k++)
+                {
                   returnCreds[paths[onePath][k]] = secret.data.data[paths[onePath[k]]];
+                  console.log(secret.data.data[paths[onePath[k]]]);
+                }
+                console.log(returnCreds);
+                console.log(paths[onePath].length);
                 core.setOutput("creds", returnCreds);
               }
             })
