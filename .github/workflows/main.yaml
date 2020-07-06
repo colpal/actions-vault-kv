@@ -14,8 +14,7 @@ jobs:
         with:
           ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19ff
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
-          vaultPath: '/secret/data/hello-world,
-                      hello'
+          vaultPath: '/secret/data/hello-world'
 
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
