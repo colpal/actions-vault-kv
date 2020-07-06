@@ -61,8 +61,10 @@ try {
               secret.errors && (console.log(secret) || process.exit(1));
               console.log("Secret opened!");
           
-              if(paths[onePath].length == 0)
-                core.setOutput("creds", secret.data.data);
+              if(paths[onePath].length <= 1)
+              {
+                paths[onePath].length == 0 ? core.setOutput("creds", secret.data.data) : core.setOutput("creds", secret.data.data[paths[onePath][k]]) 
+              }
               else
               {
                 let returnCreds = {};
@@ -72,7 +74,7 @@ try {
                 }
                 console.log(returnCreds);
                 core.setOutput("creds", returnCreds);
-              }
+              } 
             })
           })     
             req2.on('error', (error) => {
