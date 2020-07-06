@@ -13,7 +13,8 @@ try {
           currentPath = param;
           paths[currentPath] = [];
         }
-        else 
+        else
+          console.log(currentPath); 
           paths[currentPath] = paths[currentPath].push(param.trim());
     });
     console.log(paths);
