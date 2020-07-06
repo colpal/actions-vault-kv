@@ -6,11 +6,10 @@ let token;
 
 try {
     let vaultPath = [];
+    let paths = {};
     core.getInput('vaultPath').split(",").forEach(i => {
         vaultPath.push(i.trim());
     });
-
-    let returnVal = "";
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
@@ -62,10 +61,8 @@ try {
             for (let i = 1; i < vaultPath.length; i++){
               returnCreds[vaultPath[i]] = secret.data.data[vaultPath[i]];
             }
-            core.setOutput("creds",returnVal)
+            core.setOutput("creds",returnCreds)
           }
-
-          core.setOutput("creds", secret.data.data)
           })
         })
         
@@ -85,7 +82,6 @@ try {
     })
     req.write(data)
     req.end()
-    core.setOutput("creds", returnVal);
   } catch (error) {
     core.setFailed(error.message);
 }
