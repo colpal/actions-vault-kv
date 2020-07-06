@@ -7,7 +7,7 @@ let token;
 try {
     let vaultPath = [];
     let paths = {};
-    core.getInput('vaultPath').split(",").forEach(param, i => {
+    core.getInput('vaultPath').split(",").forEach((param, i) => {
         vaultPath.push(param.trim());
         if (param.includes("/")){
           paths[i] = param;
