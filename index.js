@@ -7,9 +7,13 @@ let token;
 try {
     let vaultPath = [];
     let paths = {};
-    core.getInput('vaultPath').split(",").forEach(i => {
-        vaultPath.push(i.trim());
+    core.getInput('vaultPath').split(",").forEach(param, i => {
+        vaultPath.push(param.trim());
+        if (param.includes("/")){
+          paths[i] = param;
+        }
     });
+    console.log(paths);
 /*-------------------Get token and secret----------------------------------- */
 
     const data = JSON.stringify({
