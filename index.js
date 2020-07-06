@@ -7,7 +7,6 @@ try {
     let paths = {};
     let currentPath = "";
     core.getInput('vaultPath').split(",").forEach((param, i) => {
-        vaultPath.push(param.trim());
         if (param.includes("/")){
           currentPath = param;  
           paths[currentPath] = [];
