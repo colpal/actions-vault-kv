@@ -5,19 +5,12 @@ let token;
 
 try {
   let paths = {};
-  let currentPath = "";
   let returnCreds = "";
-  console.log(JSON.parse(core.getInput('vaultPath')))
-  core.getInput('vaultPath').split(",").forEach((param, i) => {
-    if (param.includes("/")) {
-      currentPath = param;
-      paths[currentPath] = {};
-    }
-    else
-    {
-      paths[currentPath].push(param.trim()); 
-    }
-  });
+  const userInput = (JSON.parse(core.getInput('vaultPath')));
+  for (key in userInput)
+  {
+    paths[userInput[key][0]] = userInput[key].slice(1, ar.length) 
+  }
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
