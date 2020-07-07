@@ -9,7 +9,7 @@ try {
   const userInput = (JSON.parse(core.getInput('vaultPath')));
   for (key in userInput)
   {
-    paths[userInput[key][0]] = userInput[key].slice(1, ar.length) 
+    paths[userInput[key][0]] = userInput[key].slice(1, userInput[key].length) 
   }
   console.log(paths);
   /*-------------------Get token and secret----------------------------------- */
