@@ -8,10 +8,9 @@ try {
   let returnCreds = "";
   const userInput = (JSON.parse(core.getInput('vaultPath')));
   for (key in userInput)
-  {
-    paths[userInput[key][0]] = userInput[key].slice(1, userInput[key].length) 
-  }
-  console.log(paths);
+    paths[userInput[key][0]] = userInput[key].splice(0, 1, key)
+  
+  console.log(paths); 
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
