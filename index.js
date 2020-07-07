@@ -7,13 +7,16 @@ try {
   let paths = {};
   let currentPath = "";
   let returnCreds = "";
+  console.log(JSON.parse(core.getInput('vaultPath')))
   core.getInput('vaultPath').split(",").forEach((param, i) => {
     if (param.includes("/")) {
       currentPath = param;
-      paths[currentPath] = [];
+      paths[currentPath] = {};
     }
     else
-      paths[currentPath].push(param.trim());
+    {
+      paths[currentPath].push(param.trim()); 
+    }
   });
   /*-------------------Get token and secret----------------------------------- */
 
