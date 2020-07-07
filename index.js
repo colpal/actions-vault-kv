@@ -11,6 +11,7 @@ try {
   {
     paths[userInput[key][0]] = userInput[key].slice(1, ar.length) 
   }
+  console.log(paths);
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
