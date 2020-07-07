@@ -67,6 +67,7 @@ try {
               for (let k = 0; k < paths[onePath].length; k++) {
                 returnCreds[paths[onePath][k]] = secret.data.data[paths[onePath][k]];
               }
+              console.log(returnCreds);
             }
           })
         })
