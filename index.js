@@ -5,7 +5,7 @@ let token;
 
 try {
   let paths = {};
-  let returnCreds = "";
+  let returnCreds = {};
   const userInput = (JSON.parse(core.getInput('vaultPath')));
   for (key in userInput)
   {
@@ -58,11 +58,10 @@ try {
             secret.errors && (console.log(secret) || process.exit(1));
             console.log("Secret opened!");
 
-            console.log([paths[onePath][0]]);
+            console.log(paths[onePath][0]);
             if (paths[onePath].length == 1) 
             {
               returnCreds[paths[onePath][0]] = secret.data.data;
-              console.log("1:" + returnCreds);
             }
             else if (paths[onePath].length == 2)
             {
