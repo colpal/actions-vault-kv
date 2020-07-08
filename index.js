@@ -58,17 +58,10 @@ try {
             secret.errors && (console.log(secret) || process.exit(1));
             console.log("Secret opened!");
 
-            console.log(paths[onePath][0]);
             if (paths[onePath].length == 1) 
-            {
               returnCreds[paths[onePath][0]] = secret.data.data;
-            }
             else if (paths[onePath].length == 2)
-            {
               returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][1]];
-              console.log("2: " + returnCreds);
-              console.log(secret.data.data[paths[onePath][1]]);
-            }
             else {
               for (let k = 1; k < paths[onePath].length; k++) {
                 returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][k]];
