@@ -71,7 +71,6 @@ try {
                 else
                     returnCreds[paths[onePath][k+1]] = secret.data.data;  
             }
-              core.setOutput("creds", returnCreds);
           })
         })
         req2.on('error', (error) => {
@@ -81,6 +80,7 @@ try {
         })
         req2.write(data)
         req2.end()
+        core.setOutput("creds", returnCreds);
       }
     })
   })
