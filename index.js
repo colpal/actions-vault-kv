@@ -1,6 +1,7 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 let token;
 
 try {
@@ -10,15 +11,12 @@ try {
   let count = 0;
   for (key in userInput)
   {
-    if (count == 0)
-    	paths[userInput[key][0]] = userInput[key].slice(1, userInput[key].length);
-    else
-      userInput[key].length > 1 && paths[userInput[key][0]].push(userInput[key][1]);
-      
+    if (!paths.hasOwnProperty(userInput[key][0]))
+    	paths[userInput[key][0]] = [];
+    userInput[key].length == 2 ? paths[userInput[key][0]].push(userInput[key].length-1 + ':' + userInput[key][1]) : paths[userInput[key][0]].push(userInput[key].length-1 + ":")        
     paths[userInput[key][0]].push(key);
-    count++;
   }
-  console.log(paths);
+  console.log(paths); 
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
@@ -64,14 +62,18 @@ try {
             secret.errors && (console.log(secret) || process.exit(1));
             console.log("Secret opened!");
 
-            if (paths[onePath].length == 1) 
-              returnCreds[paths[onePath][0]] = secret.data.data;
-            else if (paths[onePath].length == 2)
-              returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][1]];
-            else {
-              for (let k = 1; k < paths[onePath].length; k++) {
-                returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][k]];
-              }
+            for (let k = 0; k < paths[onePath].length; k+=2)
+            {
+                let str = paths[onePath][k];
+                let idx = paths[onePath][k].indexOf(":");
+                if (str[idx-1] == 1)
+                {
+                  let thisSecret = str.substr(idx+1)
+                  returnCreds[paths[onePath][k+1]] = secret.data.data[thisSecret];
+                }
+                else
+                    returnCreds[paths[onePath][k+1]] = secret.data.data; 
+                
             }
               core.setOutput("creds", returnCreds);
           })
