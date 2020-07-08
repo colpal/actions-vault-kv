@@ -58,16 +58,17 @@ try {
             secret.errors && (console.log(secret) || process.exit(1));
             console.log("Secret opened!");
 
-            if (paths[onePath].length <= 1) {
-              returnCreds = paths[onePath].length == 0 ? secret.data.data : secret.data.data[paths[onePath][0]]
-            }
+            if (paths[onePath].length == 1) 
+              returnCreds[paths[onePath][0]] = secret.data.data;
+            else if (paths[onePath].length == 2)
+              returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][1]];
             else {
-              for (let k = 0; k < paths[onePath].length; k++) {
-                returnCreds[paths[onePath][k]] = secret.data.data[paths[onePath][k]];
+              for (let k = 1; k < paths[onePath].length; k++) {
+                returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][k]];
               }
-              console.log(secret.data.data);
               console.log(returnCreds);
             }
+              core.setOutput("creds", returnCreds);
           })
         })
         req2.on('error', (error) => {
@@ -87,7 +88,6 @@ try {
   })
   req.write(data)
   req.end()
-  core.setOutput("creds", returnCreds);
 } catch (error) {
   core.setFailed(error.message);
 }
