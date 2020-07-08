@@ -1,14 +1,12 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 let token;
 
 try {
   let paths = {};
   let returnCreds = {};
   const userInput = (JSON.parse(core.getInput('vaultPath')));
-  let count = 0;
   for (key in userInput)
   {
     if (!paths.hasOwnProperty(userInput[key][0]))
@@ -16,7 +14,6 @@ try {
     userInput[key].length == 2 ? paths[userInput[key][0]].push(userInput[key].length-1 + ':' + userInput[key][1]) : paths[userInput[key][0]].push(userInput[key].length-1 + ":")        
     paths[userInput[key][0]].push(key);
   }
-  console.log(paths); 
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
@@ -72,8 +69,7 @@ try {
                   returnCreds[paths[onePath][k+1]] = secret.data.data[thisSecret];
                 }
                 else
-                    returnCreds[paths[onePath][k+1]] = secret.data.data; 
-                
+                    returnCreds[paths[onePath][k+1]] = secret.data.data;  
             }
               core.setOutput("creds", returnCreds);
           })
