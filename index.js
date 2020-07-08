@@ -7,12 +7,18 @@ try {
   let paths = {};
   let returnCreds = {};
   const userInput = (JSON.parse(core.getInput('vaultPath')));
+  let count = 0;
   for (key in userInput)
   {
-    paths[userInput[key][0]] = (userInput[key].slice(1, userInput[key].length));
-    paths[userInput[key][0]].unshift(key);
+    if (count == 0)
+    	paths[userInput[key][0]] = userInput[key].slice(1, userInput[key].length);
+    else
+      userInput[key].length > 1 && paths[userInput[key][0]].push(userInput[key][1]);
+      
+    paths[userInput[key][0]].push(key);
+    count++;
   }
-  console.log(paths); 
+  console.log(paths);
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
@@ -67,7 +73,6 @@ try {
                 returnCreds[paths[onePath][0]] = secret.data.data[paths[onePath][k]];
               }
             }
-              console.log(returnCreds);
               core.setOutput("creds", returnCreds);
           })
         })
