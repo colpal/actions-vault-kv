@@ -68,9 +68,11 @@ try {
                 console.log("str: " + str);
                 console.log("idx: " + idx);
                 console.log("str[idx-1]: " + str[idx-1]);
+                console.log("str[idx-1] == 1: " + (str[idx-1] == 1));
                 if (str[idx-1] == 1)
                 {
                   thisSecret = str.substr(idx+1)
+                  console.log(thisSecret);
                   returnCreds[paths[onePath][k+1]] = secret.data.data[thisSecret];
                 }
                 else
