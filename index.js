@@ -14,6 +14,7 @@ try {
     userInput[key].length == 2 ? paths[userInput[key][0]].push(userInput[key].length-1 + ':' + userInput[key][1]) : paths[userInput[key][0]].push(userInput[key].length-1 + ":")        
     paths[userInput[key][0]].push(key);
   }
+  console.log(paths);
   /*-------------------Get token and secret----------------------------------- */
 
   const data = JSON.stringify({
@@ -39,6 +40,7 @@ try {
       console.log("Login successful!");
 
       for (onePath in paths) {
+        console.log("\nonePath: " + onePath);
         let secretOptions = {};
         secretOptions = {
           hostname: 'vault.colpal.cloud',
@@ -58,7 +60,7 @@ try {
             let secret = JSON.parse(d);
             secret.errors && (console.log(secret) || process.exit(1));
             console.log("Secret opened!");
-
+            console.log(secret);
             for (let k = 0; k < paths[onePath].length; k+=2)
             {
                 let str = paths[onePath][k];
