@@ -40,7 +40,7 @@ try {
       console.log("Login successful!");
 
       for (onePath in paths) {
-        console.log("\nonePath: " + onePath);
+        console.log("onePath: " + onePath);
         let secretOptions = {};
         secretOptions = {
           hostname: 'vault.colpal.cloud',
@@ -60,7 +60,6 @@ try {
             let secret = JSON.parse(d);
             secret.errors && (console.log(secret) || process.exit(1));
             console.log("Secret opened!");
-            console.log(secret);
             for (let k = 0; k < paths[onePath].length; k+=2)
             {
                 let str = paths[onePath][k];
@@ -72,6 +71,10 @@ try {
                 }
                 else
                     returnCreds[paths[onePath][k+1]] = secret.data.data;  
+                console.log("k: " + k);
+                console.log("returnCreds[paths[onePath][k+1]]: " + returnCreds[paths[onePath][k+1]]);
+                console.log("secret.data.data[thisSecret]: " + secret.data.data[thisSecret]);
+                console.log("str: " + str);
             }
             console.log(returnCreds);
           })
