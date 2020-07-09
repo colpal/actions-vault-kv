@@ -65,6 +65,9 @@ try {
                 let str = paths[onePath][k];
                 let idx = paths[onePath][k].indexOf(":");
                 let thisSecret = "";
+                console.log("str: " + str);
+                console.log("idx: " + idx);
+                console.log("str[idx-1]: " + str[idx-1]);
                 if (str[idx-1] == 1)
                 {
                   thisSecret = str.substr(idx+1)
