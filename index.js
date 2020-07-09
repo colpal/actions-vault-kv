@@ -39,22 +39,21 @@ try {
       token = JSON.parse(d).auth.client_token;
       console.log("Login successful!");
 
-      for (onePath in paths) {
-        let secretOptions = {};
-        secretOptions = {
+      let secretOptions = {};
+          secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
-          path: '/v1' + onePath,
+          path: "",
           method: 'GET',
           headers: {
             'X-Vault-Token': token,
             'Content-Type': 'application/json'
           }
         }
-
+        for (onePath in paths) {
+        req2.path = "/v1" + onePath;
         let req2 = https.request(secretOptions, (res) => {
           console.log(`\nstatusCode: ${res.statusCode}`)
-
           res.on('data', (d) => {
             let secret = JSON.parse(d);
             secret.errors && (console.log(secret) || process.exit(1));
@@ -80,7 +79,6 @@ try {
                 console.log("k: " + k);
                 console.log("returnCreds[paths[onePath][k+1]]: " + returnCreds[paths[onePath][k+1]]);
                 console.log("secret.data.data[thisSecret]: " + secret.data.data[thisSecret]);
-                console.log("str: " + str);
             }
             console.log(returnCreds);
           })
