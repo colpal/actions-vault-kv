@@ -51,8 +51,8 @@ try {
           }
         }
         for (onePath in paths) {
-        req2.path = "/v1" + onePath;
         let req2 = https.request(secretOptions, (res) => {
+          req2.path = "/v1" + onePath;
           console.log(`\nstatusCode: ${res.statusCode}`)
           res.on('data', (d) => {
             let secret = JSON.parse(d);
