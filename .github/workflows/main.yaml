@@ -1,5 +1,7 @@
-on: [push]
-
+on: 
+  push:
+    branches:
+      - async/await
 jobs:
   get_secrets:
     runs-on: self-hosted
