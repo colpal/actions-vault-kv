@@ -22,8 +22,7 @@ try {
         }
     }
 
-    const secretOptions = {};
-          secretOptions = {
+        const secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
           path: '/v1/secret/data/hello-world/user-pass',
@@ -31,7 +30,7 @@ try {
           headers: {
             'X-Vault-Token': token,
             'Content-Type': 'application/json'
-          }
+        }
     }
 
     async function main (request) {
