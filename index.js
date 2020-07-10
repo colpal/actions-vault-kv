@@ -2,7 +2,8 @@ const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
 let returnCreds = {};
-let currentCreds = {}
+let currentCreds = {};
+let userInput = {};
 let paths = {};
 let token = "";
 
@@ -21,7 +22,6 @@ try {
             'Content-Length': data.length
         }
     }
-
     const secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
@@ -32,7 +32,17 @@ try {
             'Content-Type': 'application/json'
         }
     }
-
+    /*---------------- Constructing paths json -------------------*/
+    userInput = (JSON.parse(core.getInput('vaultPath')));
+    for (key in userInput)
+    {
+      if (!paths.hasOwnProperty(userInput[key][0]))
+          paths[userInput[key][0]] = [];
+      userInput[key].length == 2 ? paths[userInput[key][0]].push(userInput[key].length-1 + ':' + userInput[key][1]) : paths[userInput[key][0]].push(userInput[key].length-1 + ":")        
+      paths[userInput[key][0]].push(key);
+    }
+    console.log(paths);
+   /*------------------------------------------------------------*/
     async function main (request) {
         try {
             let loginResponse = await fetch(tokenOptions, data);
