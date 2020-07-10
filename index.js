@@ -49,9 +49,8 @@ try {
             console.log("Login Response: " + loginResponse);
             if (loginResponse == 200) {
                 secretOptions.headers["X-Vault-Token"] = token;
-                for (onePath in path)
+                for (onePath in paths)
                 {
-                    console.log("onePath: " + onePath)
                     secretOptions.path = '/v1' + onePath;
                     let secretResponse = await fetch(secretOptions, data);
                     console.log(currentCreds);
