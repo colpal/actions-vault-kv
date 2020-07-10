@@ -2,6 +2,7 @@ const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
 let returnCreds = {};
+let currentCreds = {}
 let paths = {};
 let token;
 
@@ -21,25 +22,47 @@ try {
         }
     }
 
-    async function fetch (request) {
+    const secretOptions = {};
+          secretOptions = {
+          hostname: 'vault.colpal.cloud',
+          port: 443,
+          path: '/v1/secret/data/hello-world/user-pass',
+          method: 'GET',
+          headers: {
+            'X-Vault-Token': token,
+            'Content-Type': 'application/json'
+          }
+    }
+
+    (async function (request) {
         try {
-            let loginResponse = await getToken(tokenOptions, data);
-            console.log(loginResponse); //Promise response
+            const loginResponse = await fetch(tokenOptions, data);
+            console.log("Login Response: " + loginResponse);
+            if (loginResponse == 200){
+                let secretResponse = await fetch(secretOptions, data);
+                console.log(currentCreds);
+            }
         } catch(e) {
             console.log(e);
         }
-    }
-    fetch();
+    })();
 
-    function getToken(options, data) {
+    function fetch(options, data) {
         return new Promise((resolve, reject) => {
-            const req = https.request(tokenOptions, (res) => {
-                console.log(`statusCode: ${res.statusCode}`)
+            const req = https.request(options, (res) => {
             
                 res.on('data', (d) => {
-                  token = JSON.parse(d).auth.client_token;
-                  console.log("Login successful!");
-                  resolve(res.statusCode);
+                  let response = JSON.parse(d);
+                  if (response.hasOwnProperty("errors"))
+                      reject(response);
+                  else if (response.hasOwnProperty("auth.client_token")) {
+                      token = response.auth.client_token;
+                      resolve(res.statusCode);
+                  }
+                  else {
+                      currentCreds = response.data.data;
+                      resolve(res.statusCode);
+                  }
                 })
             })
             req.on('error', (error) => {
