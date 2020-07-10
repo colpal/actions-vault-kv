@@ -22,7 +22,7 @@ try {
         }
     }
 
-        const secretOptions = {
+    const secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
           path: '/v1/secret/data/hello-world/user-pass',
@@ -56,7 +56,7 @@ try {
                   let response = JSON.parse(d);
                   if (response.hasOwnProperty("errors"))
                       reject(response);
-                  else if (response.hasOwnProperty("auth")) {
+                  else if (response.hasOwnProperty("auth") && token === "") {
                       token = response.auth.client_token;
                       resolve(res.statusCode);
                   }
