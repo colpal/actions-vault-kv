@@ -25,7 +25,7 @@ try {
     const secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
-          path: '/v1/secret/data/hello-world/user-pass',
+          path: "",
           method: 'GET',
           headers: {
             'X-Vault-Token': token,
@@ -47,11 +47,15 @@ try {
         try {
             let loginResponse = await fetch(tokenOptions, data);
             console.log("Login Response: " + loginResponse);
-            if (loginResponse == 200) {
+            loginResponse.then((statusCode) => {
                 secretOptions.headers["X-Vault-Token"] = token;
-                let secretResponse = await fetch(secretOptions, data);
-                console.log(currentCreds);
-            }
+                for (onePath in path)
+                {
+                    secretOptions.path = '/v1' + onePath;
+                    let secretResponse = await fetch(secretOptions, data);
+                    console.log(currentCreds);
+                }
+            })
         } catch(e) {
             console.log(e);
         }
