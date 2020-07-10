@@ -22,10 +22,10 @@ try {
             'Content-Length': data.length
         }
     }
-    const secretOptions = {
+    let secretOptions = {
           hostname: 'vault.colpal.cloud',
           port: 443,
-          path: "",
+          path: '/v1',
           method: 'GET',
           headers: {
             'X-Vault-Token': token,
