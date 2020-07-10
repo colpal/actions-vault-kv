@@ -53,10 +53,9 @@ try {
             
                 res.on('data', (d) => {
                   let response = JSON.parse(d);
-                  console.log(response);
                   if (response.hasOwnProperty("errors"))
                       reject(response);
-                  else if (response.hasOwnProperty("auth.client_token")) {
+                  else if (response.hasOwnProperty("auth")) {
                       token = response.auth.client_token;
                       resolve(res.statusCode);
                   }
