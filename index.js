@@ -28,7 +28,7 @@ try {
           path: '/v1/secret/data/hello-world/user-pass',
           method: 'GET',
           headers: {
-            'X-Vault-Token': token,
+            'X-Vault-Token': "",
             'Content-Type': 'application/json'
         }
     }
@@ -37,7 +37,8 @@ try {
         try {
             let loginResponse = await fetch(tokenOptions, data);
             console.log("Login Response: " + loginResponse);
-            if (loginResponse == 200){
+            if (loginResponse == 200) {
+                secretOptions.headers["X-Vault-Token"] = token;
                 let secretResponse = await fetch(secretOptions, data);
                 console.log(currentCreds);
             }
