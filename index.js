@@ -53,8 +53,25 @@ try {
                 {
                     secretOptions.path = '/v1' + onePath;
                     let secretResponse = await fetch(secretOptions, data);
-                    console.log(currentCreds);
+                    if (secretResponse == 200)
+                    {
+                        for (let k = 0; k < paths[onePath].length; k+=2)
+                        {
+                            let str = paths[onePath][k];
+                            let idx = paths[onePath][k].indexOf(":");
+                            let thisSecret = "";
+                            
+                            if (str[idx-1] == 1)
+                            {
+                                thisSecret = str.substr(idx+1)
+                                returnCreds[paths[onePath][k+1]] = currentCreds[thisSecret];
+                            }
+                            else
+                                returnCreds[paths[onePath][k+1]] = currentCreds;
+                        }
+                    }
                 }
+                console.log(returnCreds);
             }
         } catch(e) {
             console.log(e);
