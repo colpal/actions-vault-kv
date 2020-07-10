@@ -20,7 +20,7 @@ jobs:
             {
               "usr" : ["/secret/data/hello-world/user-pass", "username"],
               "pass" : ["/secret/data/hello-world/user-pass", "password"],
-              "id" : ["/secret/data/hello-world/id", "ID Number"]
+              "id" : ["/secret/data/hello-world/id"]
             }
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
