@@ -23,8 +23,7 @@ try {
 
     async function fetch (request) {
         try {
-            let loginPromise = getToken(tokenOptions, data);
-            let loginResponse = await loginPromise;
+            let loginResponse = await getToken(tokenOptions, data);
             console.log(loginResponse); //Promise response
         } catch(e) {
             console.log(e);
@@ -34,22 +33,21 @@ try {
 
     function getToken(options, data) {
         return new Promise((resolve, reject) => {
-            const req = https.request(options, (res) => {
+            const req = https.request(tokenOptions, (res) => {
                 console.log(`statusCode: ${res.statusCode}`)
             
                 res.on('data', (d) => {
-                token = JSON.parse(d).auth.client_token;
-                console.log("Login successful!");
-                resolve(res.statusCode);
+                  token = JSON.parse(d).auth.client_token;
+                  console.log("Login successful!");
+                  resolve(res.statusCode);
                 })
-
-                req.on('error', (error) => {
-                    console.error(error)
-                    reject(error);
-                })
-            req.write(data)
-            req.end();
             })
+            req.on('error', (error) => {
+                console.error(error)
+                reject(error);
+            })
+            req.write(data)
+            req.end()
         })
     }
 } catch (error) {
