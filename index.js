@@ -4,7 +4,7 @@ const https = require('https');
 let returnCreds = {};
 let currentCreds = {}
 let paths = {};
-let token;
+let token = "";
 
 try {
     const data = JSON.stringify({
@@ -28,7 +28,7 @@ try {
           path: '/v1/secret/data/hello-world/user-pass',
           method: 'GET',
           headers: {
-            'X-Vault-Token': "",
+            'X-Vault-Token': token,
             'Content-Type': 'application/json'
         }
     }
