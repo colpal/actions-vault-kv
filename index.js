@@ -47,7 +47,7 @@ try {
         try {
             let loginResponse = await fetch(tokenOptions, data);
             console.log("Login Response: " + loginResponse);
-            loginResponse.then((statusCode) => {
+            loginResponse.then(async (statusCode) => {
                 secretOptions.headers["X-Vault-Token"] = token;
                 for (onePath in path)
                 {
