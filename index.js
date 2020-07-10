@@ -40,11 +40,7 @@ try {
                 res.on('data', (d) => {
                 token = JSON.parse(d).auth.client_token;
                 console.log("Login successful!");
-                })
-            
-                res.on('end', () => {
-                    let response_body = Buffer.concat(chunks_of_data);
-                    resolve(response_body.toString());
+                resolve(res.statusCode);
                 })
 
                 req.on('error', (error) => {
@@ -52,6 +48,7 @@ try {
                     reject(error);
                 })
             req.write(data)
+            req.end();
             })
         })
     }
