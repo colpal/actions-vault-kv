@@ -47,7 +47,7 @@ try {
         try {
             let loginResponse = await fetch(tokenOptions, data);
             console.log("Login Response: " + loginResponse);
-            loginResponse.then(async (statusCode) => {
+            if (loginResponse == 200) {
                 secretOptions.headers["X-Vault-Token"] = token;
                 for (onePath in path)
                 {
@@ -55,7 +55,7 @@ try {
                     let secretResponse = await fetch(secretOptions, data);
                     console.log(currentCreds);
                 }
-            })
+            }
         } catch(e) {
             console.log(e);
         }
