@@ -36,7 +36,7 @@ try {
 
     async function main (request) {
         try {
-            const loginResponse = await fetch(tokenOptions, data);
+            let loginResponse = await fetch(tokenOptions, data);
             console.log("Login Response: " + loginResponse);
             if (loginResponse == 200){
                 let secretResponse = await fetch(secretOptions, data);
