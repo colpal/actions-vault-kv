@@ -34,7 +34,7 @@ try {
           }
     }
 
-    (async function (request) {
+    async function main (request) {
         try {
             const loginResponse = await fetch(tokenOptions, data);
             console.log("Login Response: " + loginResponse);
@@ -45,7 +45,8 @@ try {
         } catch(e) {
             console.log(e);
         }
-    })();
+    }
+    main();
 
     function fetch(options, data) {
         return new Promise((resolve, reject) => {
