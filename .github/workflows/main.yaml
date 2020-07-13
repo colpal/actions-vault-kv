@@ -18,9 +18,9 @@ jobs:
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
           vaultPath: |
             {
-              "usr" : ["/secret/data/hello-world/user-pass", "username"],
-              "pass" : ["/secret/data/hello-world/user-pass", "password"],
-              "id" : ["/secret/data/hello-world/id"]
+              "usr" : ["secret/hello-world/user-pass", "username"],
+              "pass" : ["secret/hello-world/user-pass", "password"],
+              "id" : ["secret/hello-world/id"]
             }
       - name: Get the output creds
         run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"

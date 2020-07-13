@@ -41,7 +41,6 @@ try {
       userInput[key].length == 2 ? paths[userInput[key][0]].push(userInput[key].length-1 + ':' + userInput[key][1]) : paths[userInput[key][0]].push(userInput[key].length-1 + ":")        
       paths[userInput[key][0]].push(key);
     }
-    console.log(paths);
    /*------------------------------------------------------------*/
     async function main (request) {
         try {
@@ -51,7 +50,8 @@ try {
                 secretOptions.headers["X-Vault-Token"] = token;
                 for (onePath in paths)
                 {
-                    secretOptions.path = '/v1' + onePath;
+                    secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
+                    console.log(secretOptions.path);
                     let secretResponse = await fetch(secretOptions, data);
                     if (secretResponse == 200)
                     {
