@@ -22,7 +22,12 @@ jobs:
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
-      - run: test "WRONG_USERNAME" = "${{ fromJson(steps.secret.outputs.creds).usr }}" || exit 1;
+      - name: Automated Testing
+      - run: | 
+          test "USERNAME_VAL" = "${{ fromJson(steps.secret.outputs.creds).usr }}" || exit 1;
+          test "PASSWORD_VAL" = "${{ fromJson(steps.secret.outputs.creds).pass }}" || exit 1;
+          test "99999" = "${{ fromJson(steps.secret.outputs.creds).id.ID_Number }}" || exit 1;
+          test "rudra_desai@colpal.com" = "${{ fromJson(steps.secret.outputs.creds).id.email }}" || exit 1;
 
         
       - uses: colpal/actions-clean@v1.0.2
