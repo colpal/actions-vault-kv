@@ -51,7 +51,6 @@ try {
                 for (onePath in paths)
                 {
                     secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
-                    console.log(secretOptions.path);
                     let secretResponse = await fetch(secretOptions, data);
                     if (secretResponse == 200)
                     {
@@ -71,7 +70,7 @@ try {
                         }
                     }
                 }
-                console.log(returnCreds);
+                core.setOutput("creds", returnCreds);
             }
         } catch(e) {
             console.log(e);
