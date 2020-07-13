@@ -22,8 +22,7 @@ jobs:
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
-      - name: Get the output creds
-        run: echo "usr - ${{ fromJson(steps.secret.outputs.creds).id.email }}"
+      - run: test "USERNAME_VAL" = ${{ fromJson(steps.secret.outputs.creds).usr }} && echo "True" || echo "False"
         
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
