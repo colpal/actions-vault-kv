@@ -22,7 +22,8 @@ jobs:
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
-      - run: test "USERNAME_VAL" = ${{ fromJson(steps.secret.outputs.creds).usr }} && echo "True" || echo "False"
+      - run: test "WRONG_USERNAME" = "${{ fromJson(steps.secret.outputs.creds).usr }}" && echo "True" || echo "False"
+
         
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
