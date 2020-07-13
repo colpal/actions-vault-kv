@@ -22,7 +22,7 @@ jobs:
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
-      - run: test "WRONG_USERNAME" = "${{ fromJson(steps.secret.outputs.creds).usr }}" && echo "True" || echo "False"
+      - run: test "WRONG_USERNAME" = "${{ fromJson(steps.secret.outputs.creds).usr }}" || exit 1;
 
         
       - uses: colpal/actions-clean@v1.0.2
