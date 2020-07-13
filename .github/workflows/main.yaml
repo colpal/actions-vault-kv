@@ -23,7 +23,7 @@ jobs:
               "id" : ["secret/hello-world/id"]
             }
       - name: Get the output creds
-        run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
+        run: echo "usr - ${{ fromJson(steps.secret.outputs.creds).usr }}"
         
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
