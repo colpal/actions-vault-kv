@@ -24,10 +24,10 @@ jobs:
             }
       - name: Automated Testing
         run: | 
-          test "USERNAME_VAL" = "${{ fromJson(steps.secret.outputs).usr }}"
-          test "PASSWORD_VAL" = "${{ fromJson(steps.secret.outputs).pass }}"
-          test "99999" = "${{ fromJson(steps.secret.outputs).id.ID_Number }}"
-          test "rudra_desai@colpal.com" = "${{ fromJson(steps.secret.outputs).id.email }}"
+          test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
+          test "PASSWORD_VAL" = "${{ steps.secret.outputs.pass }}"
+          test "99999" = "${{ fromJson(steps.secret.outputs.id).ID_Number }}"
+          test "rudra_desai@colpal.com" = "${{ fromJson(steps.secret.outputs.id).email }}"
 
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
