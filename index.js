@@ -69,7 +69,9 @@ function mapValues()
 {
     for (key in userInput)
     {
-        console.log("key: " + key + "val: " + paths[[key][0]][[key][1]]);
+        console.log("key: " + key);
+        let response = paths[userInput[key][0]]
+        console.log(response);
     }
 }
 
