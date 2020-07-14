@@ -7,39 +7,38 @@ let userInput = {};
 let paths = {};
 let token = "";
 
-try {
-    const data = JSON.stringify({
-        role_id: core.getInput('ROLE_ID'),
-        secret_id: core.getInput('SECRET_ID')
-    })
-    const tokenOptions = {
+
+const data = JSON.stringify({
+    role_id: core.getInput('ROLE_ID'),
+    secret_id: core.getInput('SECRET_ID')
+})
+const tokenOptions = {
+    hostname: 'vault.colpal.cloud',
+    port: 443,
+    path: '/v1/auth/approle/login',
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': data.length
+    }
+}
+let secretOptions = {
         hostname: 'vault.colpal.cloud',
         port: 443,
-        path: '/v1/auth/approle/login',
-        method: 'POST',
+        path: '/v1',
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': data.length
-        }
+        'X-Vault-Token': token,
+        'Content-Type': 'application/json'
     }
-    let secretOptions = {
-          hostname: 'vault.colpal.cloud',
-          port: 443,
-          path: '/v1',
-          method: 'GET',
-          headers: {
-            'X-Vault-Token': token,
-            'Content-Type': 'application/json'
-        }
-    }
+}
+try {
+    userInput = (JSON.parse(core.getInput('secret-paths'))); //add try catch
     /*---------------- Constructing paths json -------------------*/
-    userInput = (JSON.parse(core.getInput('vaultPath')));
     for (key in userInput)
     {
       if (!paths.hasOwnProperty(userInput[key][0]))
-          paths[userInput[key][0]] = [];
-      userInput[key].length == 2 ? paths[userInput[key][0]].push(userInput[key].length-1 + ':' + userInput[key][1]) : paths[userInput[key][0]].push(userInput[key].length-1 + ":")        
-      paths[userInput[key][0]].push(key);
+          paths[userInput[key][0]] = null;
     }
    /*------------------------------------------------------------*/
     async function main (request) {
@@ -54,22 +53,10 @@ try {
                     let secretResponse = await fetch(secretOptions, data);
                     if (secretResponse == 200)
                     {
-                        for (let k = 0; k < paths[onePath].length; k+=2)
-                        {
-                            let str = paths[onePath][k];
-                            let idx = paths[onePath][k].indexOf(":");
-                            let thisSecret = "";
-                            
-                            if (str[idx-1] == 1)
-                            {
-                                thisSecret = str.substr(idx+1)
-                                returnCreds[paths[onePath][k+1]] = currentCreds[thisSecret];
-                            }
-                            else
-                                returnCreds[paths[onePath][k+1]] = currentCreds;
-                        }
+                        paths[onePath] = currentCreds;
                     }
                 }
+                console.log(paths);
                 core.setOutput("creds", returnCreds);
             }
         } catch(e) {
