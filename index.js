@@ -32,65 +32,70 @@ let secretOptions = {
         'Content-Type': 'application/json'
     }
 }
-try {
-    userInput = (JSON.parse(core.getInput('secret-paths'))); //add try catch
-    /*---------------- Constructing paths json -------------------*/
+userInput = (JSON.parse(core.getInput('secret-paths'))); //add try catch
+/*---------------- Constructing paths json -------------------*/
+for (key in userInput)
+{
+    if (!paths.hasOwnProperty(userInput[key][0]))
+        paths[userInput[key][0]] = null;
+}
+/*------------------------------------------------------------*/
+async function main (request) {
+    try {
+        let loginResponse = await fetch(tokenOptions, data);
+        console.log("Login Response: " + loginResponse);
+        if (loginResponse == 200) {
+            secretOptions.headers["X-Vault-Token"] = token;
+            for (onePath in paths)
+            {
+                secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
+                let secretResponse = await fetch(secretOptions, data);
+                if (secretResponse == 200)
+                {
+                    paths[onePath] = currentCreds;
+                }
+            }
+            mapValues();
+            console.log(paths);
+            core.setOutput("creds", returnCreds);
+        }
+    } catch(e) {
+        console.log(e);
+    }
+}
+main();
+
+function mapValues()
+{
     for (key in userInput)
     {
-      if (!paths.hasOwnProperty(userInput[key][0]))
-          paths[userInput[key][0]] = null;
+        console.log("key: " + key + "val: " + paths[[key][0]][[key][1]]);
     }
-   /*------------------------------------------------------------*/
-    async function main (request) {
-        try {
-            let loginResponse = await fetch(tokenOptions, data);
-            console.log("Login Response: " + loginResponse);
-            if (loginResponse == 200) {
-                secretOptions.headers["X-Vault-Token"] = token;
-                for (onePath in paths)
-                {
-                    secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
-                    let secretResponse = await fetch(secretOptions, data);
-                    if (secretResponse == 200)
-                    {
-                        paths[onePath] = currentCreds;
-                    }
-                }
-                console.log(paths);
-                core.setOutput("creds", returnCreds);
-            }
-        } catch(e) {
-            console.log(e);
-        }
-    }
-    main();
+}
 
-    function fetch(options, data) {
-        return new Promise((resolve, reject) => {
-            const req = https.request(options, (res) => {
-            
-                res.on('data', (d) => {
-                  let response = JSON.parse(d);
-                  if (response.hasOwnProperty("errors"))
-                      reject(response);
-                  else if (response.hasOwnProperty("auth") && token === "") {
-                      token = response.auth.client_token;
-                      resolve(res.statusCode);
-                  }
-                  else {
-                      currentCreds = response.data.data;
-                      resolve(res.statusCode);
-                  }
-                })
+function fetch(options, data) {
+    return new Promise((resolve, reject) => {
+        const req = https.request(options, (res) => {
+        
+            res.on('data', (d) => {
+                let response = JSON.parse(d);
+                if (response.hasOwnProperty("errors"))
+                    reject(response);
+                else if (response.hasOwnProperty("auth") && token === "") {
+                    token = response.auth.client_token;
+                    resolve(res.statusCode);
+                }
+                else {
+                    currentCreds = response.data.data;
+                    resolve(res.statusCode);
+                }
             })
-            req.on('error', (error) => {
-                console.error(error)
-                reject(error);
-            })
-            req.write(data)
-            req.end()
         })
-    }
-} catch (error) {
-    core.setFailed(error.message);
+        req.on('error', (error) => {
+            console.error(error)
+            reject(error);
+        })
+        req.write(data)
+        req.end()
+    })
 }
