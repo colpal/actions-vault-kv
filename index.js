@@ -51,12 +51,9 @@ async function main (request) {
                 secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
                 let secretResponse = await fetch(secretOptions, data);
                 if (secretResponse == 200)
-                {
                     paths[onePath] = currentCreds;
-                }
             }
             mapValues();
-            core.setOutput("creds", returnCreds);
         }
     } catch(e) {
         console.log(e);
@@ -68,16 +65,12 @@ function mapValues()
 {
     for (key in userInput)
     {
-        console.log("key: " + key);
         let response = paths[userInput[key][0]]
         if (userInput[key][1])
-        {
-            returnCreds[key] = response[userInput[key][1]]
-        } else {
-            returnCreds[key] = response;
-        }
+            core.setOutput(key, response[userInput[key][1]])
+        else 
+            core.setOutput(key, response)
     }
-    console.log(returnCreds);
 }
 
 function fetch(options, data) {
