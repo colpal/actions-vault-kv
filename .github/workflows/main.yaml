@@ -1,7 +1,4 @@
-on: 
-  push:
-    branches:
-      - async/await_modifications
+on: [push]
 jobs:
   get_secrets:
     runs-on: self-hosted

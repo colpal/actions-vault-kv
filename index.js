@@ -3,7 +3,6 @@ const core = require('@actions/core');
 const https = require('https');
 let returnCreds = {};
 let currentCreds = {};
-let userInput = {};
 let paths = {};
 let token = "";
 
@@ -22,7 +21,7 @@ const tokenOptions = {
         'Content-Length': data.length
     }
 }
-let secretOptions = {
+const secretOptions = {
         hostname: 'vault.colpal.cloud',
         port: 443,
         path: '/v1',
@@ -32,14 +31,12 @@ let secretOptions = {
         'Content-Type': 'application/json'
     }
 }
-userInput = (JSON.parse(core.getInput('secret-paths'))); //add try catch
-/*---------------- Constructing paths json -------------------*/
-for (key in userInput)
-{
-    if (!paths.hasOwnProperty(userInput[key][0]))
-        paths[userInput[key][0]] = null;
+const userInput = (JSON.parse(core.getInput('secret-paths'))); //add try catch
+
+for (const [path] of Object.values(userInput)){
+    paths[path] = null;
 }
-/*------------------------------------------------------------*/
+
 async function main (request) {
     try {
         let loginResponse = await fetch(tokenOptions, data);
