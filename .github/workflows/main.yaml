@@ -1,5 +1,7 @@
-on: [push]
-
+on: 
+  push:
+    branches:
+      - async/await_modifications
 jobs:
   get_secrets:
     runs-on: self-hosted
@@ -14,15 +16,19 @@ jobs:
         with:
           ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19ff
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
-          vaultPath: |
+          secret-paths: |
             {
-              "usr" : ["/secret/data/hello-world/user-pass", "username"],
-              "pass" : ["/secret/data/hello-world/user-pass", "password"],
-              "id" : ["/secret/data/hello-world/id", "ID Number"]
+              "usr" : ["secret/hello-world/user-pass", "username"],
+              "pass" : ["secret/hello-world/user-pass", "password"],
+              "id" : ["secret/hello-world/id"]
             }
-      - name: Get the output creds
-        run: echo "Creds returned - ${{ steps.secret.outputs.creds }}"
-        
+      - name: Automated Testing
+        run: | 
+          test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
+          test "PASSWORD_VAL" = "${{ steps.secret.outputs.pass }}"
+          test "99999" = "${{ fromJson(steps.secret.outputs.id).ID_Number }}"
+          test "rudra_desai@colpal.com" = "${{ fromJson(steps.secret.outputs.id).email }}"
+
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
         
