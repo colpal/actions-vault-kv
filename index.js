@@ -38,7 +38,6 @@ async function main (request) {
     
     await fetch(tokenOptions, data).then(res => {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
-        console.log("res: " + JSON.stringify(res));
     }).catch(res => {
         core.setFailed("Could not log you in, check your Role ID and Secret ID!");
         console.log(res.err);
@@ -49,7 +48,7 @@ async function main (request) {
     {   
         secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
         await fetch(secretOptions, data).then(res => {
-            paths[onePath] = secretResponse.val.data.data;
+            paths[onePath] = res.val.data.data;
         }).catch(res => {
             core.setFailed("Could not open your secret, check the paths!");
             console.log(res.err);
