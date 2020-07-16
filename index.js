@@ -40,6 +40,7 @@ async function main (request) {
     {
         secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
         getSecret().then(secretResponse => {
+            console.log("StatusCode: " + secretResponse.statusCode)
             if (secretResponse.statusCode != 200) {
                 core.setFailed("Could not open the secret you requested!");
                 process.exit(1);
@@ -85,9 +86,10 @@ function fetch(options, data) {
 async function getSecret() {
     if (secretOptions.headers["X-Vault-Token"] == "") {
         const token = await fetch(tokenOptions, data);
-        console.log(token);
+        console.log("Token: " + token);
         secretOptions.headers["X-Vault-Token"] = token.val.auth.client_token;
     }
     const response = await fetch (secretOptions, data);
+    console.log("Response: " + response);
     return response;
 }
