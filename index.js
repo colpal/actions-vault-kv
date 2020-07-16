@@ -39,26 +39,24 @@ async function main (request) {
     await fetch(tokenOptions, data).then(res => {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
         console.log("res: " + res);
-    }).catch(() => {
-        core.setFailed("Could not open the secret you requested!");
+    }).catch(res => {
+        core.setFailed("Could not log you in, check your Role ID and Secret ID!");
+        console.log(res.err);
         process.exit(1);
     })
 
     for (onePath in paths)
-    {
+    {   
         secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
-        getSecret().then(secretResponse => {
-            console.log("StatusCode: " + secretResponse.statusCode)
-            if (secretResponse.statusCode != 200) {
-                core.setFailed("Could not open the secret you requested!");
-                process.exit(1);
-            }
+        await fetch(secretOptions, data).then(res => {
             paths[onePath] = secretResponse.val.data.data;
-            console.log("SecretResponse: " + secretResponse);
-            console.log("SecretResponse.data: " + secretResponse.val.data.data);
-           
-        });
+        }).catch(res => {
+            core.setFailed("Could not open your secret, check the paths!");
+            console.log(res.err);
+            process.exit(1);
+        })
     }
+    console.log("Paths: " + paths);
     mapValues(paths, userInput);    
 }
 main();
@@ -85,19 +83,9 @@ function fetch(options, data) {
         })
         req.on('error', (error) => {
             console.error(error)
-            reject({status: res.statusCode, val: error});
+            reject({status: res.statusCode, err: error});
         })
         req.write(data)
         req.end()
     })
-}
-async function getSecret() {
-    if (secretOptions.headers["X-Vault-Token"] == "") {
-        const token = await fetch(tokenOptions, data);
-        console.log("Token: " + token);
-        secretOptions.headers["X-Vault-Token"] = token.val.auth.client_token;
-    }
-    const response = await fetch (secretOptions, data);
-    console.log("Response: " + response);
-    return response;
 }
