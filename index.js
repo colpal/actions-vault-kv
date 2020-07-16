@@ -38,7 +38,7 @@ async function main (request) {
     
     await fetch(tokenOptions, data).then(res => {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
-        console.log("res: " + res);
+        console.log("res: " + JSON.stringify(res));
     }).catch(res => {
         core.setFailed("Could not log you in, check your Role ID and Secret ID!");
         console.log(res.err);
