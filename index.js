@@ -79,11 +79,10 @@ function fetch(options, data) {
     })
 }
 async function getSecret() {
-    const response = {}
     if (secretOptions.headers["X-Vault-Token"] == ""){
-        response = await fetch(tokenOptions, data);
-        secretOptions.headers["X-Vault-Token"] = response.auth.client_token;
+        const token = await fetch(tokenOptions, data);
+        secretOptions.headers["X-Vault-Token"] = token.auth.client_token;
     }
-    response = await fetch (secretOptions, data);
+    const response = await fetch (secretOptions, data);
     return response.data.data;
 }
