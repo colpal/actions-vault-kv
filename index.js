@@ -40,12 +40,12 @@ async function main (request) {
     {
         secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
         let secretResponse = getSecret();
-        if (!secretResponse) {
+        if (secretResponse.statusCode != 200) {
             core.setFailed("Could not open the secret you requested!");
             process.exit(1);
         }
-        paths[onePath] = secretResponse;
-        console.log("SecretResponse: " + secretResponse);
+        paths[onePath] = secretResponse.val.data.data;
+        console.log("SecretResponse: " + secretResponse.val.data.data);
     }
     mapValues(paths, userInput);    
 }
@@ -68,22 +68,24 @@ function fetch(options, data) {
         const req = https.request(options, (res) => {
         
             res.on('data', (d) => {
-                resolve(JSON.parse(d));
+                resolve({status: res.statusCode, val: JSON.parse(d)});
             })
         })
         req.on('error', (error) => {
             console.error(error)
-            reject(error);
+            reject({status: res.statusCode, val: error});
         })
         req.write(data)
         req.end()
     })
 }
 async function getSecret() {
-    if (secretOptions.headers["X-Vault-Token"] == ""){
-        const token = await fetch(tokenOptions, data);
-        secretOptions.headers["X-Vault-Token"] = token.auth.client_token;
-    }
-    const response = await fetch (secretOptions, data);
-    return response.data.data;
+    return new Promise((resolve, reject) => {
+        if (secretOptions.headers["X-Vault-Token"] == "") {
+            const token = await fetch(tokenOptions, data);
+            secretOptions.headers["X-Vault-Token"] = token.val.auth.client_token;
+        }
+        const response = await fetch (secretOptions, data);
+        resolve(response);
+    })
 }
