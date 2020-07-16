@@ -55,20 +55,21 @@ async function main (request) {
             process.exit(1);
         })
     }
-    console.log("Paths: " + paths);
-    mapValues(paths, userInput);    
+    setValues(paths, userInput);    
 }
-main();
 
-function mapValues(paths, userInput)
+function setValues(paths, userInput)
 {
-    for (key in userInput)
-    {
-        let response = paths[userInput[key][0]]
-        if (userInput[key][1])
-            core.setOutput(key, response[userInput[key][1]])
-        else 
+    for (const [key, val] of Object.entries(userInput)) {
+        const path = val[0];
+        const secret = val[1];
+        const response = paths[path];
+
+        if (secret){
+            core.setOutput(key, response[secret]);
+        } else {
             core.setOutput(key, response)
+        }
     }
 }
 
@@ -88,3 +89,5 @@ function fetch(options, data) {
         req.end()
     })
 }
+
+main();
