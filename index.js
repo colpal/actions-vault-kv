@@ -1,11 +1,6 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
-let returnCreds = {};
-let currentCreds = {};
-let paths = {};
-let token = "";
-
 
 const data = JSON.stringify({
     role_id: core.getInput('ROLE_ID'),
@@ -22,43 +17,40 @@ const tokenOptions = {
     }
 }
 const secretOptions = {
-        hostname: 'vault.colpal.cloud',
-        port: 443,
-        path: '/v1',
-        method: 'GET',
-        headers: {
-        'X-Vault-Token': token,
+    hostname: 'vault.colpal.cloud',
+    port: 443,
+    path: '/v1',
+    method: 'GET',
+    headers: {
+        'X-Vault-Token': "",
         'Content-Type': 'application/json'
     }
 }
-const userInput = (JSON.parse(core.getInput('secret-paths'))); //add try catch
-
-for (const [path] of Object.values(userInput)){
-    paths[path] = null;
-}
 
 async function main (request) {
-    try {
-        let loginResponse = await fetch(tokenOptions, data);
-        console.log("Login Response: " + loginResponse);
-        if (loginResponse == 200) {
-            secretOptions.headers["X-Vault-Token"] = token;
-            for (onePath in paths)
-            {
-                secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
-                let secretResponse = await fetch(secretOptions, data);
-                if (secretResponse == 200)
-                    paths[onePath] = currentCreds;
-            }
-            mapValues();
-        }
-    } catch(e) {
-        console.log(e);
+
+    const userInput = (JSON.parse(core.getInput('secret-paths')));
+    const paths = {};
+
+    for (const [path] of Object.values(userInput)) {
+        paths[path] = null;
     }
+
+    for (onePath in paths)
+    {
+        secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
+        let secretResponse = getSecret();
+        if (!secretResponse) {
+            core.setFailed("Could not open the secret you requested!");
+            process.exit(1);
+        }
+        paths[onePath] = secretResponse;
+    }
+    mapValues(paths, userInput);    
 }
 main();
 
-function mapValues()
+function mapValues(paths, userInput)
 {
     for (key in userInput)
     {
@@ -75,17 +67,7 @@ function fetch(options, data) {
         const req = https.request(options, (res) => {
         
             res.on('data', (d) => {
-                let response = JSON.parse(d);
-                if (response.hasOwnProperty("errors"))
-                    reject(response);
-                else if (response.hasOwnProperty("auth") && token === "") {
-                    token = response.auth.client_token;
-                    resolve(res.statusCode);
-                }
-                else {
-                    currentCreds = response.data.data;
-                    resolve(res.statusCode);
-                }
+                resolve(JSON.parse(d));
             })
         })
         req.on('error', (error) => {
@@ -95,4 +77,13 @@ function fetch(options, data) {
         req.write(data)
         req.end()
     })
+}
+async function getSecret() {
+    const response = {}
+    if (secretOptions.headers["X-Vault-Token"] == ""){
+        response = await fetch(tokenOptions, data);
+        secretOptions.headers["X-Vault-Token"] = response.auth.client_token;
+    }
+    response = await fetch (secretOptions, data);
+    return response.data.data;
 }
