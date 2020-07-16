@@ -85,6 +85,7 @@ function fetch(options, data) {
 async function getSecret() {
     if (secretOptions.headers["X-Vault-Token"] == "") {
         const token = await fetch(tokenOptions, data);
+        console.log(token);
         secretOptions.headers["X-Vault-Token"] = token.val.auth.client_token;
     }
     const response = await fetch (secretOptions, data);
