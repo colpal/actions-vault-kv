@@ -35,6 +35,14 @@ async function main (request) {
     for (const [path] of Object.values(userInput)) {
         paths[path] = null;
     }
+    
+    await fetch(tokenOptions, data).then(res => {
+        secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
+        console.log("res: " + res);
+    }).catch(() => {
+        core.setFailed("Could not open the secret you requested!");
+        process.exit(1);
+    })
 
     for (onePath in paths)
     {
