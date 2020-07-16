@@ -30,6 +30,7 @@ const secretOptions = {
 async function main (request) {
 
     const userInput = (JSON.parse(core.getInput('secret-paths')));
+
     const paths = {};
 
     for (const [path] of Object.values(userInput)) {
@@ -39,20 +40,22 @@ async function main (request) {
     await fetch(tokenOptions, data).then(res => {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
     }).catch(res => {
-        core.setFailed("Could not log you in, check your Role ID and Secret ID!");
         console.log(res.err);
-        process.exit(1);
+        core.setFailed("Could not log you in, check your Role ID and Secret ID!");
     })
 
     for (onePath in paths)
     {   
-        secretOptions.path = '/v1/secret/data' + onePath.substr(onePath.indexOf("secret/")+6);
+        const regex = /\/?secret\/(.*)/
+        const [,capture] = onePath.match(regex);
+        secretOptions.path = `/v1/secret/data/${capture}`;
+        
         await fetch(secretOptions, data).then(res => {
             paths[onePath] = res.val.data.data;
         }).catch(res => {
-            core.setFailed("Could not open your secret, check the paths!");
+            console.log("Could not open: " + onePath);
             console.log(res.err);
-            process.exit(1);
+            core.setFailed("Could not open your secret, Check the log for more information!");  
         })
     }
     setValues(paths, userInput);    
