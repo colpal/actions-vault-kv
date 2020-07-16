@@ -28,12 +28,16 @@ const secretOptions = {
 }
 
 async function main (request) {
-
-    const userInput = (JSON.parse(core.getInput('secret-paths')));
+    let userInput;
+    try {
+        userInput = JSON.parse(core.getInput('secret-paths'));
+    } catch (error) {
+        console.log(error);
+        core.setFailed("Could not parse your input for 'secret-paths'. Make sure 'secret-paths' is a valid JSON object");
+    }
 
     const paths = {};
-
-    for (const [path] of Object.values(userInput)) {
+    for (const [path] of Object.values(userInput)){
         paths[path] = null;
     }
     
@@ -49,7 +53,7 @@ async function main (request) {
         const regex = /\/?secret\/(.*)/
         const [,capture] = onePath.match(regex);
         secretOptions.path = `/v1/secret/data/${capture}`;
-        
+
         await fetch(secretOptions, data).then(res => {
             paths[onePath] = res.val.data.data;
         }).catch(res => {
@@ -81,7 +85,11 @@ function fetch(options, data) {
         const req = https.request(options, (res) => {
         
             res.on('data', (d) => {
-                resolve({status: res.statusCode, val: JSON.parse(d)});
+                let response = JSON.parse(d);
+                if (response.errors){
+                    reject({status: res.statusCode, err: response})
+                }
+                resolve({status: res.statusCode, val: response});
             })
         })
         req.on('error', (error) => {
