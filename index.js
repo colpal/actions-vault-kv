@@ -45,6 +45,7 @@ async function main (request) {
             process.exit(1);
         }
         paths[onePath] = secretResponse;
+        console.log("SecretResponse: " + secretResponse);
     }
     mapValues(paths, userInput);    
 }
