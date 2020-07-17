@@ -61,7 +61,7 @@ async function main (request) {
         }).catch(res => {
             console.log(`Could not open: ${onePath}. Check that the path is valid.`);
             console.log(res.err);
-            core.setFailed(`Could not open your secret, ${onePath}`);  
+            core.setFailed(`Could not open this secret: ${onePath}`);  
             process.exit(1);
         })
     }
