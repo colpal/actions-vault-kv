@@ -46,7 +46,7 @@ async function main (request) {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
     }).catch(res => {
         console.log(res.err);
-        core.setFailed("Could not log you in, check your Role ID and Secret ID!");
+        core.setFailed(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`);
         process.exit(1);
     })
 
@@ -59,9 +59,9 @@ async function main (request) {
         await fetch(secretOptions, data).then(res => {
             paths[onePath] = res.val.data.data;
         }).catch(res => {
-            console.log("Could not open: " + onePath);
+            console.log(`Could not open: ${onePath}. Check that the path is valid.`);
             console.log(res.err);
-            core.setFailed("Could not open your secret, Check the log for more information!");  
+            core.setFailed(`Could not open your secret, ${onePath}`);  
             process.exit(1);
         })
     }
