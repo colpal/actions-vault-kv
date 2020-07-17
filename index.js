@@ -34,6 +34,7 @@ async function main (request) {
     } catch (error) {
         console.log(error);
         core.setFailed("Could not parse your input for 'secret-paths'. Make sure 'secret-paths' is a valid JSON object");
+        process.exit(1);
     }
 
     const paths = {};
@@ -60,6 +61,7 @@ async function main (request) {
             console.log("Could not open: " + onePath);
             console.log(res.err);
             core.setFailed("Could not open your secret, Check the log for more information!");  
+            process.exit(1);
         })
     }
     setValues(paths, userInput);    
