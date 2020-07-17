@@ -47,6 +47,7 @@ async function main (request) {
     }).catch(res => {
         console.log(res.err);
         core.setFailed("Could not log you in, check your Role ID and Secret ID!");
+        process.exit(1);
     })
 
     for (onePath in paths)
