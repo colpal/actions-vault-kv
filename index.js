@@ -50,7 +50,7 @@ async function main (request) {
         process.exit(1);
     })
 
-    for (onePath in paths)
+    for (const onePath of Object.keys(paths))
     {   
         const regex = /\/?secret\/(.*)/
         const [,capture] = onePath.match(regex);
