@@ -18,8 +18,8 @@ jobs:
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
           secret-paths: |
             {
-              "usr" : ["secret/hello-world/user-pass", "username"],
-              "pass" : ["secret/hello-world/user-pass", "password"],
+              "usr" : ["secret/hello-world/user-pass", "username"]
+              "pass" : ["secret/hello-world/user-pass", "password"]
               "id" : ["secret/hello-world/id"]
             }
       - name: Automated Testing
