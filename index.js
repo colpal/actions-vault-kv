@@ -46,30 +46,31 @@ async function main (request) {
     })
 
     const regex = /\/?secret\/(.*)/
-    const responses = await Promise.all(Object.keys(paths).map(async path => {
-        const [,capture] = path.match(regex);
-        const newPath = `/v1/secret/data/${capture}`
-        const response = await fetch({...secretOptions, newPath}, data)
-        response.TEMP_PATH = path;
-        return response;
-    })
-); 
-    console.log("Responses: \n" + responses);
-
-    for (const onePath of Object.keys(paths))
-    {   
-        const regex = /\/?secret\/(.*)/
+    const promises = Object.keys(paths).map(async onePath => {
         const [,capture] = onePath.match(regex);
         path = `/v1/secret/data/${capture}`
-        newSecretOptions = {...secretOptions, path};
+        const response = await fetch({...secretOptions, path}, data)
+        response.TEMP_PATH = onePath;
+        return response;
+    })
 
-        await fetch(newSecretOptions, data).then(res => {
-            paths[onePath] = res.val.data.data;
-        }).catch(res => {
-            fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(res.err)}`)
-        })
-    }
-    setValues(paths, userInput);    
+    const responses = await Promise.all(promises); 
+    console.log("Responses: \n" + responses);
+
+    // for (const onePath of Object.keys(paths))
+    // {   
+    //     const regex = /\/?secret\/(.*)/
+    //     const [,capture] = onePath.match(regex);
+    //     path = `/v1/secret/data/${capture}`
+    //     newSecretOptions = {...secretOptions, path};
+
+    //     await fetch(newSecretOptions, data).then(res => {
+    //         paths[onePath] = res.val.data.data;
+    //     }).catch(res => {
+    //         fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(res.err)}`)
+    //     })
+    // }
+    // setValues(paths, userInput);    
 }
 
 function setValues(paths, userInput)
