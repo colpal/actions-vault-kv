@@ -47,7 +47,7 @@ async function main (request) {
 
     promises = Object.keys(paths).map(async path => {
         const regex = /\/?secret\/(.*)/
-        const [,capture] = onePath.match(regex);
+        const [,capture] = path.match(regex);
         newPath = `/v1/secret/data/${capture}`
         const response = await fetch({...secretOptions, newPath}, data)
         response.TEMP_PATH = path;
