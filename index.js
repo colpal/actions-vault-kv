@@ -45,8 +45,8 @@ async function main (request) {
         fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`)
     })
 
+    const regex = /\/?secret\/(.*)/
     promises = Object.keys(paths).map(async path => {
-        const regex = /\/?secret\/(.*)/
         const [,capture] = path.match(regex);
         newPath = `/v1/secret/data/${capture}`
         const response = await fetch({...secretOptions, newPath}, data)
