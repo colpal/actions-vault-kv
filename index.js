@@ -54,7 +54,7 @@ async function main (request) {
       })
     ); 
     for (const response of responses){
-        paths[path] = response.val.data.data;
+        paths[response.ACTUAL_PATH] = response.val.data.data;
     }
     setValues(paths, userInput);
 }
