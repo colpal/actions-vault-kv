@@ -44,6 +44,10 @@ async function main (request) {
         fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`)
     })
 
+    promises = paths.map(async path => {
+        console.log(path);
+    })
+    
     for (const onePath of Object.keys(paths))
     {   
         const regex = /\/?secret\/(.*)/
@@ -54,7 +58,7 @@ async function main (request) {
         await fetch(newSecretOptions, data).then(res => {
             paths[onePath] = res.val.data.data;
         }).catch(res => {
-            fail(`Could not open: ${onePath}. Check that the path is valid.\n${res.err.errors}`)
+            fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(res.err)}`)
         })
     }
     setValues(paths, userInput);    
@@ -62,13 +66,13 @@ async function main (request) {
 
 function setValues(paths, userInput)
 {
-    for (const [newKey, [path, secret]] of Object.entries(userInput)) {
+    for (const [userKey, [path, secret]] of Object.entries(userInput)) {
         const response = paths[path];
 
         if (secret) {
-            core.setOutput(newKey, response[secret]);
+            core.setOutput(userKey, response[secret]);
         } else {
-            core.setOutput(newKey, response)
+            core.setOutput(userKey, response)
         }
     }
 }
