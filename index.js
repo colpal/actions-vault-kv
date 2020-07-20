@@ -1,6 +1,7 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
+const { promises } = require('fs');
 
 const data = JSON.stringify({
     role_id: core.getInput('ROLE_ID', {required: true}),
@@ -45,8 +46,16 @@ async function main (request) {
     })
 
     promises = Object.keys(paths).map(async path => {
-        console.log(path);
+        const regex = /\/?secret\/(.*)/
+        const [,capture] = onePath.match(regex);
+        newPath = `/v1/secret/data/${capture}`
+        const response = await fetch({...secretOptions, newPath}, data)
+        response.TEMP_PATH = path;
+        return response;
     })
+
+    const responses = await promises.all(promises); 
+    console.log("Responses: \n" + responses);
 
     for (const onePath of Object.keys(paths))
     {   
