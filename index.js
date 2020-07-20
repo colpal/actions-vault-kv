@@ -54,27 +54,9 @@ async function main (request) {
       })
     ); 
     for (const response of responses){
-        const path = response.ACTUAL_PATH;
         paths[path] = response.val.data.data;
-        console.log(response + "\n\n");
-        console.log(paths[path]);
     }
-
     setValues(paths, userInput);
-    // for (const onePath of Object.keys(paths))
-    // {   
-    //     const regex = /\/?secret\/(.*)/
-    //     const [,capture] = onePath.match(regex);
-    //     path = `/v1/secret/data/${capture}`
-    //     newSecretOptions = {...secretOptions, path};
-
-    //     await fetch(newSecretOptions, data).then(res => {
-    //         paths[onePath] = res.val.data.data;
-    //     }).catch(res => {
-    //         fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(res.err)}`)
-    //     })
-    // }
-    // setValues(paths, userInput);    
 }
 
 function setValues(paths, userInput)
