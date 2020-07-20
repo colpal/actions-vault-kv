@@ -20,7 +20,7 @@ jobs:
             {
               "usr" : ["secret/hello-world/user-pass", "username"],
               "pass" : ["secret/hello-world/user-pass", "password"],
-              "id" : ["secret/hello-world/id"]
+              "id" : ["secret/hello-world/doesNotExist"]
             }
       - name: Automated Testing
         run: | 
