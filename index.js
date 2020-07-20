@@ -41,7 +41,7 @@ async function main (request) {
     await fetch(tokenOptions, data).then(res => {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
     }).catch(res => {
-        fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}\n${res.err}`)
+        fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`)
     })
 
     for (const onePath of Object.keys(paths))
@@ -54,7 +54,7 @@ async function main (request) {
         await fetch(newSecretOptions, data).then(res => {
             paths[onePath] = res.val.data.data;
         }).catch(res => {
-            fail(`Could not open: ${onePath}. Check that the path is valid.\n${res.err}`)
+            fail(`Could not open: ${onePath}. Check that the path is valid.\n${res.err.errors}`)
         })
     }
     setValues(paths, userInput);    
