@@ -14,7 +14,7 @@ jobs:
         uses: ./
         id: secret
         with:
-          ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19fd
+          ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19ff
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
           secret-paths: |
             {
