@@ -3,8 +3,8 @@ const core = require('@actions/core');
 const https = require('https');
 
 const data = JSON.stringify({
-    role_id: core.getInput('ROLE_ID'),
-    secret_id: core.getInput('SECRET_ID')
+    role_id: core.getInput('ROLE_ID', {required: true}),
+    secret_id: core.getInput('SECRET_ID', {required: true})
 })
 const tokenOptions = {
     hostname: 'vault.colpal.cloud',
@@ -19,10 +19,8 @@ const tokenOptions = {
 const secretOptions = {
     hostname: 'vault.colpal.cloud',
     port: 443,
-    path: '/v1',
     method: 'GET',
     headers: {
-        'X-Vault-Token': "",
         'Content-Type': 'application/json'
     }
 }
@@ -32,9 +30,7 @@ async function main (request) {
     try {
         userInput = JSON.parse(core.getInput('secret-paths'));
     } catch (error) {
-        console.log(error);
-        core.setFailed("Could not parse your input for 'secret-paths'. Make sure 'secret-paths' is a valid JSON object");
-        process.exit(1);
+        fail(`Could not parse your input for 'secret-paths'. Make sure 'secret-paths' is a valid JSON object\n${error}`)
     }
 
     const paths = {};
@@ -45,24 +41,20 @@ async function main (request) {
     await fetch(tokenOptions, data).then(res => {
         secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
     }).catch(res => {
-        console.log(res.err);
-        core.setFailed(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`);
-        process.exit(1);
+        fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}\n${res.err}`)
     })
 
     for (const onePath of Object.keys(paths))
     {   
         const regex = /\/?secret\/(.*)/
         const [,capture] = onePath.match(regex);
-        secretOptions.path = `/v1/secret/data/${capture}`;
+        path = `/v1/secret/data/${capture}`
+        newSecretOptions = {...secretOptions, path};
 
-        await fetch(secretOptions, data).then(res => {
+        await fetch(newSecretOptions, data).then(res => {
             paths[onePath] = res.val.data.data;
         }).catch(res => {
-            console.log(`Could not open: ${onePath}. Check that the path is valid.`);
-            console.log(res.err);
-            core.setFailed(`Could not open this secret: ${onePath}`);  
-            process.exit(1);
+            fail(`Could not open: ${onePath}. Check that the path is valid.\n${res.err}`)
         })
     }
     setValues(paths, userInput);    
@@ -70,15 +62,13 @@ async function main (request) {
 
 function setValues(paths, userInput)
 {
-    for (const [key, val] of Object.entries(userInput)) {
-        const path = val[0];
-        const secret = val[1];
+    for (const [newKey, [path, secret]] of Object.entries(userInput)) {
         const response = paths[path];
 
-        if (secret){
-            core.setOutput(key, response[secret]);
+        if (secret) {
+            core.setOutput(newKey, response[secret]);
         } else {
-            core.setOutput(key, response)
+            core.setOutput(newKey, response)
         }
     }
 }
@@ -104,4 +94,8 @@ function fetch(options, data) {
     })
 }
 
+function fail(message){
+    core.setFailed(message);
+    process.exit(1);
+}
 main();
