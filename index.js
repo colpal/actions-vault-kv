@@ -48,9 +48,12 @@ async function main (request) {
     const responses = await Promise.all(Object.keys(paths).map(async onePath => {
         const [,capture] = onePath.match(regex);
         const path = `/v1/secret/data/${capture}`
-        const response = await fetch({...secretOptions, path}, data)
-        response.ACTUAL_PATH = onePath;
-        return response;
+       await fetch({...secretOptions, path}, data).then(res => {
+            res.ACTUAL_PATH = onePath;
+            return res;
+       }).catch(error => {
+            fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(error.err)}`)
+       })
       })
     ); 
     for (const response of responses){
