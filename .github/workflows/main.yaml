@@ -14,13 +14,13 @@ jobs:
         uses: ./
         id: secret
         with:
-          ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19ff
+          ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19fd
           SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
           secret-paths: |
             {
               "usr" : ["secret/hello-world/user-pass", "username"],
               "pass" : ["secret/hello-world/user-pass", "password"],
-              "id" : ["secret/hello-world/doesNotExist"]
+              "id" : ["secret/hello-world/id"]
             }
       - name: Automated Testing
         run: | 
