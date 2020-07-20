@@ -55,8 +55,8 @@ async function main (request) {
     ); 
     for (const response of responses){
         const path = response.ACTUAL_PATH;
-        delete response.ACTUAL_PATH;
-        paths[path] = response;
+        paths[path] = response.val.data.data;
+        console.log(response + "\n\n");
         console.log(paths[path]);
     }
 
