@@ -44,10 +44,10 @@ async function main (request) {
         fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`)
     })
 
-    promises = paths.map(async path => {
+    promises = Object.keys(paths).map(async path => {
         console.log(path);
     })
-    
+
     for (const onePath of Object.keys(paths))
     {   
         const regex = /\/?secret\/(.*)/
