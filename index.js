@@ -55,7 +55,7 @@ async function main (request) {
     })
 
     const responses = await Promise.all(promises); 
-    console.log("Responses: \n" + responses);
+    console.log("Responses: \n" + JSON.stringify(responses));
 
     // for (const onePath of Object.keys(paths))
     // {   
