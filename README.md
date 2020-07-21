@@ -7,10 +7,8 @@ jobs:
   get_credentials:
     # Make sure you are running on a self-hosted runner
     runs-on: self-hosted 
-    name: An action to fetch credentials # You can name this anything you like
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.1
       
       # Be sure to set an ID on the step that invokes the action. We need this later to access outputs!
       - id: secret
