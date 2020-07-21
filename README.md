@@ -14,8 +14,8 @@ jobs:
       - id: secret
         uses: colpal/actions-vault-kv@v1
         with:
-          role-id: 12345678-9123  
-          secret-id: 12345678-9123
+          role-id: 12345678-abcd  
+          secret-id: 98765432-wxyz
           secret-paths: |
             {
               "usr" : ["secret/google", "username"],
