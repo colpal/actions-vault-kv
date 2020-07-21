@@ -13,7 +13,7 @@ const tokenOptions = {
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': data.length
+        'Content-Length': loginBody.length
     }
 }
 const secretOptions = {
@@ -39,7 +39,7 @@ async function main (request) {
     }
 
     try {
-        const tokenReponse = await fetch(tokenOptions, data);
+        const tokenReponse = await fetch(tokenOptions, loginBody);
         secretOptions.headers["X-Vault-Token"] = tokenReponse.val.auth.client_token;
     } catch (res) {
         fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`)
@@ -50,7 +50,7 @@ async function main (request) {
         const [,capture] = onePath.match(regex);
         const path = `/v1/secret/data/${capture}`
         try {
-            const response = await fetch({...secretOptions, path}, data)
+            const response = await fetch({...secretOptions, path}, loginBody)
             response.ACTUAL_PATH = onePath;
             return response;
         } catch (res){
