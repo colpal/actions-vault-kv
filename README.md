@@ -22,6 +22,7 @@ jobs:
               "pass" : ["secret/google", "password"],
               "creds" : ["secret/multipleCredentials"]
             }
+            # Make sure you don't provide a duplicate key and follow conventions of JSON Object
             
       # Accessing returned values and setting them as env. variables      
       - env:
