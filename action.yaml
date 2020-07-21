@@ -2,18 +2,15 @@
 name: 'Secret'
 description: 'Get secrets from vault'
 inputs:
-  ROLE_ID: 
+  role-id: 
     description: 'Role ID for vault login'
     required: true
-  SECRET_ID: 
+  secret-id: 
     description: 'Secret ID for vault login'
     required: true
   secret-paths: 
     description: 'path to secret'
     required: true
-outputs:
-  creds: 
-    description: 'credentials from vault'
 runs:
   using: 'node12'
   main: 'index.js'
