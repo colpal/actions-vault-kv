@@ -16,11 +16,14 @@ jobs:
           secret-id: ${{ secrets.SECRET_ID }}
           secret-paths: |
             {
-              "usr" : ["secret/google", "username"], #The first item is the path in Vault, the second is the key you want
+              "usr" : ["secret/google", "username"], 
               "pass" : ["secret/google", "password"],
-              "creds" : ["secret/multipleCredentials"] #If you don't provide a key, it grabs the entire secret as JSON
+              "creds" : ["secret/multipleCredentials"] 
             }
           # Make sure you don't provide a duplicate key and follow syntax for a JSON Object
+          # The first item is the path in Vault, the second is the key you want
+          # If you don't provide a key, it grabs the entire secret as JSON
+          
             
       # Accessing returned values and setting them as env. variables      
       - env:
