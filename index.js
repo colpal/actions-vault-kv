@@ -2,7 +2,7 @@ const github = require('@actions/github');
 const core = require('@actions/core');
 const https = require('https');
 
-const data = JSON.stringify({
+const loginBody = JSON.stringify({
     role_id: core.getInput('ROLE_ID', {required: true}),
     secret_id: core.getInput('SECRET_ID', {required: true})
 })
@@ -28,7 +28,7 @@ const secretOptions = {
 async function main (request) {
     let userInput;
     try {
-        userInput = JSON.parse(core.getInput('secret-paths'));
+        userInput = JSON.parse(core.getInput('secret-paths', {required: true}));
     } catch (error) {
         fail(`Could not parse your input for 'secret-paths'. Make sure 'secret-paths' is a valid JSON object\n${error}`)
     }
@@ -37,12 +37,13 @@ async function main (request) {
     for (const [path] of Object.values(userInput)){
         paths[path] = null;
     }
-    
-    await fetch(tokenOptions, data).then(res => {
-        secretOptions.headers["X-Vault-Token"] = res.val.auth.client_token;
-    }).catch(res => {
+
+    try {
+        const tokenReponse = await fetch(tokenOptions, data);
+        secretOptions.headers["X-Vault-Token"] = tokenReponse.val.auth.client_token;
+    } catch (res) {
         fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`)
-    })
+    }
 
     const regex = /\/?secret\/(.*)/
     const responses = await Promise.all(Object.keys(paths).map(async onePath => {
