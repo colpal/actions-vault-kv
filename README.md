@@ -3,11 +3,9 @@ A library to get credentials from HashiCorp Vault
 
 ## Usage
 ```yaml
-```yaml
 jobs:
   get_credentials:
-```
- ** `# Make sure you are running on a self-hosted runner `**
+    # Make sure you are running on a self-hosted runner
     runs-on: self-hosted 
     steps:
       - uses: actions/checkout@v2.3.1
@@ -24,4 +22,9 @@ jobs:
              "pass" : ["secret/hello-world/user-pass", "password"],
              "id" : ["secret/hello-world/id"]
           }
+          # secret-paths follows JSON Object representation so make sure secret paths is a valid JSON Object
+          # Make sure that path starts with /secret/ or secret/
+          # {
+          #    "your output key name" : ["secret/path-to-the-secret", "name of the credential in vault"]
+          # }
 ```
