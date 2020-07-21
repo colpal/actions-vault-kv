@@ -12,18 +12,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      # Name this step anything you like
-      - name: Fetching credentials from vault 
-      id: secret
-      uses: actions/actions-vault-kv@v1
-      with:
-        # Provide your valid Role ID and Secret ID
-        ROLE_ID: 12345678-9123-abcd-wzys-0123456789ab # Your Role ID here
-        SECRET_ID: 12345678-9123-abcd-wzys-0123456789ab # Your Secret ID here
-        secret-paths: |
-        {
-           "usr" : ["secret/hello-world/user-pass", "username"],
-           "pass" : ["secret/hello-world/user-pass", "password"],
-           "id" : ["secret/hello-world/id"]
-        }
+      # Be sure to set an ID on the step that invokes the action. We need this later to access outputs!
+      - id: secret
+        uses: actions/actions-vault-kv@v1
+        with:
+          ROLE_ID: 12345678-9123-abcd-wzys-0123456789ab # Your Role ID here
+          SECRET_ID: 12345678-9123-abcd-wzys-0123456789ab # Your Secret ID here
+          secret-paths: |
+          {
+             "usr" : ["secret/hello-world/user-pass", "username"],
+             "pass" : ["secret/hello-world/user-pass", "password"],
+             "id" : ["secret/hello-world/id"]
+          }
 ```
