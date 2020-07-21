@@ -3,11 +3,11 @@ A library to get credentials from HashiCorp Vault
 
 ## Usage
 ```yaml
+```yaml
 jobs:
   get_credentials:
 ```
- ** # Make sure you are running on a self-hosted runner **
-```yaml
+ ** `# Make sure you are running on a self-hosted runner `**
     runs-on: self-hosted 
     steps:
       - uses: actions/checkout@v2.3.1
