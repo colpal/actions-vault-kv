@@ -8,19 +8,17 @@ jobs:
     # Make sure you are running on a self-hosted runner
     runs-on: self-hosted 
     steps:
-      - uses: actions/checkout@v2.3.1
-      
       # Be sure to set an ID on the step that invokes the action. We need this later to access outputs!
       - id: secret
         uses: colpal/actions-vault-kv@v1
         with:
           role-id: 12345678-abcd  
-          secret-id: 98765432-wxyz
+          secret-id: ${{ secrets.SECRET_ID }}
           secret-paths: |
             {
-              "usr" : ["secret/google", "username"],
+              "usr" : ["secret/google", "username"], # The first item is the path in Vault, the second is the key you want
               "pass" : ["secret/google", "password"],
-              "creds" : ["secret/multipleCredentials"]
+              "creds" : ["secret/multipleCredentials"] # If you don't provide a key, it grabs the entire secret as JSON
             }
           # Make sure you don't provide a duplicate key and follow syntax for a JSON Object
             
