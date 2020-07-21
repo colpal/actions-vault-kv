@@ -62,11 +62,6 @@ async function main (request) {
     }
 
     setValues(paths, userInput);
-
-    for (const response of responses){
-        paths[response.ACTUAL_PATH] = response.val.data.data;
-    }
-    setValues(paths, userInput);
 }
 
 function setValues(paths, userInput)
