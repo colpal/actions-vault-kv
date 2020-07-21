@@ -3,8 +3,8 @@ const core = require('@actions/core');
 const https = require('https');
 
 const loginBody = JSON.stringify({
-    role_id: core.getInput('ROLE_ID', {required: true}),
-    secret_id: core.getInput('SECRET_ID', {required: true})
+    role_id: core.getInput('role-id', {required: true}),
+    secret_id: core.getInput('secret-id', {required: true})
 })
 const tokenOptions = {
     hostname: 'vault.colpal.cloud',

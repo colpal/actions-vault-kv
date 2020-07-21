@@ -5,7 +5,6 @@ on:
 jobs:
   get_secrets:
     runs-on: self-hosted
-    name: An action to get secrets
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -14,8 +13,8 @@ jobs:
         uses: ./
         id: secret
         with:
-          ROLE_ID: 774e2757-4579-c411-4d04-68477ccf19ff
-          SECRET_ID: ${{ secrets.APPROLE_SECRET_ID }}
+          role-id: 774e2757-4579-c411-4d04-68477ccf19ff
+          secret-id: ${{ secrets.APPROLE_SECRET_ID }}
           secret-paths: |
             {
               "usr" : ["secret/hello-world/user-pass", "username"],
