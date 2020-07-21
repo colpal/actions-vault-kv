@@ -31,14 +31,15 @@ jobs:
           id: ${{ fromJson(steps.secret.outputs.creds).id }}     
 ```
 ## Inputs
-role-id: Your Role ID used to log into vault
-secret-id: Your Secret ID used to log into vault
-secret-paths: secret-paths follows JSON Object representation so make sure secret paths is a valid JSON Object
-              Make sure that path starts with /secret/ or secret/ For Example: 
-              ```yaml
-              {
-                "Your output key name" : ["secret/path-to-the-secret", "name of the credential in vault"],
-                "Different key name" : ["secret/path-to-the-secret"]
-              }
-              ```
-              **Notice: if the specific name of the credential from vault is not requested then you will receive all credentials from that path**
+```yaml
+  role-id: Your Role ID used to log into vault
+  secret-id: Your Secret ID used to log into vault
+  secret-paths: secret-paths follows JSON Object representation so make sure secret paths is a valid JSON Object
+                Make sure that path starts with /secret/ or secret/ For Example: 
+                {
+                  "Your output key name" : ["secret/path-to-the-secret", "name of the credential in vault"],
+                  "Different key name" : ["secret/path-to-the-secret"]
+                }
+
+                Notice: if the specific name of the credential from vault is not requested then you will receive all credentials from that path
+ ```
