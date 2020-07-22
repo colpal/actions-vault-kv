@@ -6,6 +6,7 @@ jobs:
   get_secrets:
     runs-on: self-hosted
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -17,10 +18,11 @@ jobs:
           secret-id: ${{ secrets.APPROLE_SECRET_ID }}
           secret-paths: |
             {
-              "usr" : ["secret/hello-world/user-pass", "username"],
+              "usr" : ["secret/hello-world/user-pass", "username"], 
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
+
       - name: Automated Testing
         run: | 
           test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
@@ -31,3 +33,10 @@ jobs:
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
         
+ # secret-paths follows JSON Object representation so make sure secret paths is a valid JSON Object
+          # Make sure that path starts with /secret/ or secret/ For Example: 
+          # {
+          #    "Your output key name" : ["secret/path-to-the-secret", "name of the credential in vault"],
+          #    "Different key name" : ["secret/path-to-the-secret"]
+          # }
+          # Notice: if the specific name of the credential from vault is not requested then you will receive all credentials from that path

@@ -72,6 +72,7 @@ function setValues(paths, userInput)
 
         if (secret) {
             core.setOutput(userKey, response[secret]);
+            core.setSecret(userKey);
         } else {
             core.setOutput(userKey, response)
         }
