@@ -18,11 +18,14 @@ jobs:
           secret-id: ${{ secrets.APPROLE_SECRET_ID }}
           secret-paths: |
             {
-              "usr" : ["secret/hello-world/user-pass", "username"], 
+              "usr" : ["secret/hello-world/user-pass", "username"],
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
 
+      - name: Echoing Results
+        run: |
+          echo ${{ steps.secret.outputs.id }}      
       - name: Automated Testing
         run: | 
           test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
