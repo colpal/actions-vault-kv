@@ -24,7 +24,6 @@ jobs:
           # The first item is the path in Vault, the second is the key you want
           # If you don't provide a key, it grabs the entire secret as JSON
           
-            
       # Accessing returned values and setting them as env. variables      
       - env:
           usr: ${{ steps.secret.outputs.usr }}
