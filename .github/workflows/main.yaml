@@ -25,7 +25,7 @@ jobs:
 
       - name: Echoing Results
         run: |
-          echo ${{ steps.secret.outputs.id }}      
+          echo ${{ steps.secret.outputs }}      
       - name: Automated Testing
         run: | 
           test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
