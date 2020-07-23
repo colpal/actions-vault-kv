@@ -1,7 +1,7 @@
 on: 
   push:
     branches:
-      - master
+      - small_changes
 jobs:
   get_secrets:
     runs-on: self-hosted
@@ -22,10 +22,7 @@ jobs:
               "pass" : ["secret/hello-world/user-pass", "password"],
               "id" : ["secret/hello-world/id"]
             }
-
-      - name: Echoing Results
-        run: |
-          echo ${{ steps.secret.outputs }}      
+              
       - name: Automated Testing
         run: | 
           test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
