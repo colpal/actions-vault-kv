@@ -88,9 +88,12 @@ function setValues(paths, userInput)
 function fetch(options, data) {
     return new Promise((resolve, reject) => {
         const req = https.request(options, (res) => {
-        
+            const body = [];
             res.on('data', (d) => {
-                let response = JSON.parse(d);
+                body.push(d);
+            });
+            res.on('end', () => {
+                let response = JSON.parse(body.join(''));
                 if (response.errors){
                     reject({status: res.statusCode, err: response})
                 }
