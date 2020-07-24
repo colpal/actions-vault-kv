@@ -59,18 +59,12 @@ async function main (request) {
       })
     ); 
     for (const response of responses){
-        paths[response.ACTUAL_PATH] = maskVals(response.val.data.data);
+        paths[response.ACTUAL_PATH] = response.val.data.data;
     }
 
     setValues(paths, userInput);
 }
 
-function maskVals(secret_obj)
-{
-    for (const [key, secret] of Object.entries(secret_obj)){
-    }
-    return secret_obj;
-}
 function setValues(paths, userInput)
 {
     for (const [userKey, [path, secret]] of Object.entries(userInput)) {
