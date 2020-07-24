@@ -4,30 +4,51 @@ A library to get credentials from HashiCorp Vault
 ## Usage
 ```yaml
 jobs:
-  default:
+  get_secrets:
     # Make sure you are running on a self-hosted runner
-    runs-on: self-hosted 
+    runs-on: self-hosted
+    # This allows the outputs to be accessed by another job
+    outputs:
+      username: ${{ steps.secret.outputs.username }}
+      password: ${{ steps.secret.outputs.password }}
+      report: ${{ steps.secret.outputs.report }}
     steps:
-      # Be sure to set an ID on the step that invokes the action. We need this later to access outputs!
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Be sure to set an ID on the step that invokes the action. We need this
+      # later to access outputs!
       - id: secret
-        uses: colpal/actions-vault-kv@v1
+        uses: ./
         with:
-          role-id: 12345678-abcd  
-          secret-id: ${{ secrets.SECRET_ID }}
-          secret-paths: |
-            {
-              "usr" : ["secret/google", "username"], 
-              "pass" : ["secret/google", "password"],
-              "creds" : ["secret/multipleCredentials"] 
-            }
-          # Make sure you don't provide a duplicate key and follow syntax for a JSON Object
+          # These come from your AppRole definition in Vault
+          role-id: APPROLE_ROLE_ID
+          secret-id: ${{ secrets.APPROLE_SECRET_ID }}
           # The first item is the path in Vault, the second is the key you want
           # If you don't provide a key, it grabs the entire secret as JSON
-          
-      # Accessing returned values and setting them as env. variables      
-      - env:
-          usr: ${{ steps.secret.outputs.usr }}
-          pass: ${{ steps.secret.outputs.pass }}
-          email: ${{ fromJson(steps.secret.outputs.creds).email }}
-          id: ${{ fromJson(steps.secret.outputs.creds).id }}     
+          secret-paths: >-
+            {
+              "username" : ["secret/our-account", "username"],
+              "password" : ["secret/our-account", "password"],
+              "report" : ["secret/report"]
+            }
+      - uses: colpal/actions-clean@v1
+        if: ${{ always() }}
+
+  use_secrets:
+    runs-on: ubuntu-latest
+    # Don't forget to "need" the job that grabbed the secrets
+    needs: [get_secrets]
+    # Here, we can bind the secrets as ENV variables on this runner
+    env:
+      USERNAME: ${{ needs.get_secrets.outputs.username }}
+      PASSWORD: ${{ needs.get_secrets.outputs.password }}
+      REPORT: ${{ needs.get_secrets.outputs.report }}
+    steps:
+      # Don't forget to mask the secrets you don't want to show up in logs!
+      - run: |
+          echo "::add-mask::$PASSWORD"
+          echo "::add-mask::$REPORT"
+      - run: echo "I could login with my $USERNAME and $PASSWORD!"
+      - run: echo "$REPORT" > report.json
+
 ```
