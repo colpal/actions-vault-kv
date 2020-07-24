@@ -18,7 +18,7 @@ jobs:
       # Be sure to set an ID on the step that invokes the action. We need this
       # later to access outputs!
       - id: secret
-        uses: ./
+        uses: colpal/actions-vault-kv@v1
         with:
           # These come from your AppRole definition in Vault
           role-id: APPROLE_ROLE_ID
