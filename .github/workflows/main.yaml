@@ -35,5 +35,5 @@ jobs:
           test "rudra_desai@colpal.com" \
                = "${{ fromJson(steps.secret.outputs.id).email }}"
 
-      - uses: colpal/actions-clean@v1.0.2
+      - uses: colpal/actions-clean@v1
         if: ${{ always() }}
