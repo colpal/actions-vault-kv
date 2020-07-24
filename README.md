@@ -50,5 +50,4 @@ jobs:
           echo "::add-mask::$REPORT"
       - run: echo "I could login with my $USERNAME and $PASSWORD!"
       - run: echo "$REPORT" > report.json
-
 ```
