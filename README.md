@@ -25,8 +25,7 @@ jobs:
               "username" : ["secret/our-account", "username"],
               "password" : ["secret/our-account", "password"]
             }
-      # Don't forget to mask the secrets you don't want to show up in logs!
-      - run: echo "::add-mask::${{ steps.secret.outputs.password}}"
+      # Don't actually echo these... they won't be hidden
       - run: echo "My username is ${{ steps.secret.outputs.username }}"
       - run: echo "My password is ${{ steps.secret.outputs.password }}"
       - uses: colpal/actions-clean@v1
@@ -77,10 +76,7 @@ jobs:
       PASSWORD: ${{ needs.get_secrets.outputs.password }}
       REPORT: ${{ needs.get_secrets.outputs.report }}
     steps:
-      # Don't forget to mask the secrets you don't want to show up in logs!
-      - run: |
-          echo "::add-mask::$PASSWORD"
-          echo "::add-mask::$REPORT"
+      # Don't actually echo these... they won't be hidden
       - run: echo "My username is $USERNAME"
       - run: echo "My password is $PASSWORD"
       - run: echo "$REPORT" > report.json
