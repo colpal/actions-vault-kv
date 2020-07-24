@@ -1,8 +1,6 @@
 ---
-'on':
-  push:
-    branches:
-      - master
+'on': push
+
 jobs:
   get_secrets:
     runs-on: self-hosted
