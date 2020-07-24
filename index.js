@@ -68,7 +68,6 @@ async function main (request) {
 function maskVals(secret_obj)
 {
     for (const [key, secret] of Object.entries(secret_obj)){
-        core.setSecret(secret);
     }
     return secret_obj;
 }
