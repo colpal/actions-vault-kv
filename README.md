@@ -2,6 +2,39 @@
 A library to get credentials from HashiCorp Vault
 
 ## Usage
+
+### Basic
+
+```yaml
+jobs:
+  main:
+    # Make sure you are running on a self-hosted runner
+    runs-on: self-hosted
+    steps:
+      # Be sure to set an ID on the step that invokes the action. We need this
+      # later to access outputs!
+      - id: secret
+        uses: ./
+        with:
+          # These come from your AppRole definition in Vault
+          role-id: APPROLE_ROLE_ID
+          secret-id: ${{ secrets.APPROLE_SECRET_ID }}
+          # The first item is the path in Vault, the second is the key you want
+          secret-paths: >-
+            {
+              "username" : ["secret/our-account", "username"],
+              "password" : ["secret/our-account", "password"]
+            }
+      # Don't forget to mask the secrets you don't want to show up in logs!
+      - run: echo "::add-mask::${{ steps.secret.outputs.password}}"
+      - run: echo "My username is ${{ steps.secret.outputs.username }}"
+      - run: echo "My password is ${{ steps.secret.outputs.password }}"
+      - uses: colpal/actions-clean@v1
+        if: ${{ always() }}
+```
+
+### Cross-Runner
+
 ```yaml
 jobs:
   get_secrets:
