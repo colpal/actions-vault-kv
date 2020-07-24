@@ -1,4 +1,5 @@
-on: 
+---
+'on':
   push:
     branches:
       - master
@@ -25,21 +26,14 @@ jobs:
 
       - name: Echoing Results
         run: |
-          echo ${{ steps.secret.outputs }}      
+          echo ${{ steps.secret.outputs }}
       - name: Automated Testing
-        run: | 
+        run: |
           test "USERNAME_VAL" = "${{ steps.secret.outputs.usr }}"
           test "PASSWORD_VAL" = "${{ steps.secret.outputs.pass }}"
           test "99999" = "${{ fromJson(steps.secret.outputs.id).ID_Number }}"
-          test "rudra_desai@colpal.com" = "${{ fromJson(steps.secret.outputs.id).email }}"
+          test "rudra_desai@colpal.com" \
+               = "${{ fromJson(steps.secret.outputs.id).email }}"
 
       - uses: colpal/actions-clean@v1.0.2
         if: ${{ always() }}
-        
- # secret-paths follows JSON Object representation so make sure secret paths is a valid JSON Object
-          # Make sure that path starts with /secret/ or secret/ For Example: 
-          # {
-          #    "Your output key name" : ["secret/path-to-the-secret", "name of the credential in vault"],
-          #    "Different key name" : ["secret/path-to-the-secret"]
-          # }
-          # Notice: if the specific name of the credential from vault is not requested then you will receive all credentials from that path
