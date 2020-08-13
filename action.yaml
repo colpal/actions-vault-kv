@@ -2,13 +2,13 @@
 name: 'Secret'
 description: 'Get secrets from vault'
 inputs:
-  role-id: 
+  role-id:
     description: 'Role ID for vault login'
     required: true
-  secret-id: 
+  secret-id:
     description: 'Secret ID for vault login'
     required: true
-  secret-paths: 
+  secret-paths:
     description: 'path to secret'
     required: true
 runs:
