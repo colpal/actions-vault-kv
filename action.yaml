@@ -11,6 +11,17 @@ inputs:
   secret-paths:
     description: 'path to secret'
     required: true
+  service_account_key:
+    description: Base64 encoded, JSON formatted service account key file
+    required: true
+  vault-address:
+    description: Address of Vault instance to connect to
+    required: false
+    default: https://public.vault.colpal.cloud
+  iap-client-id:
+    description: Client ID of IAP to authenticate through
+    required: false
+    default: 590571108011-o37jof2iadluek3dpuit5n9h8u5jldla.apps.googleusercontent.com
 runs:
   using: 'node12'
   main: 'dist/main.js'
