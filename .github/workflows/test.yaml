@@ -2,19 +2,12 @@
 'on': push
 
 jobs:
-  get_secrets:
-    runs-on: self-hosted
-    outputs:
-      usr: ${{ steps.secret.outputs.usr }}
-      pass: ${{ steps.secret.outputs.pass }}
-      long_secret: ${{ steps.secret.outputs.long_secret }}
-      id: ${{ steps.secret.outputs.id }}
+  main:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Get secrets
-        uses: ./
+      - uses: ./
         id: secret
         with:
           role-id: 774e2757-4579-c411-4d04-68477ccf19ff
@@ -27,15 +20,7 @@ jobs:
               "id" : ["secret/hello-world/id"]
             }
 
-      - uses: colpal/actions-clean@v1
-        if: ${{ always() }}
-
-  use_secrets:
-    runs-on: ubuntu-latest
-    needs: [get_secrets]
-    steps:
-      - name: Automated Testing
-        env:
+      - env:
           LONG_SECRET: e71a246ac64eefc74e7f962f7cea7f78cf43dfa0752f72262e0b0b5a3e9b631767c4defda8c87814cee746e6a8873b5565e017c55038e004eaeab7f0232282e98d7f7dc0475b1b500b79df9bbfbe5db24b69dbea3c935acc132cf56cdfd054b2859df8ad76d496179d4a13c8ac0e1e0ee623c539d1ffc9ff8623acacddf2cf451a22acc7187131bdf942973baebde73303ee5266b9ad2d639ea4b05d57d7bced95978ef86097f80114db946dc4e37d345b196703d960a441a7b799b8df6b82d9f61936e942bed90a2d4650775df3b4f3e2bb24dfd906bbf30417b56f34e2d407a8c0c8f15aca8804bf20d1e10de7daf485f60a4250d0ec120dda6310ac8d70ff7d1c2e6b5bfe50e2355a78c10cf52fa4238d843945ba2c763e051fac2a5537db4411fddcaf3560de0baa939359b9dc8ed28f7e34f860fcec57eccf845ed7a4485ae750b02339a6e094e7a0dc1c08351d2b5c55d6f911d784f65bc2b8171b6fa9776cd1ff586276ce310d461149313ef134b5bc0a9bb1564c0229c7a688db100a4dab8dbc0ac2174e2e5c938ecb00c48bfdd9e1882631339f27a82a1932b32667ceb5efc8e0a2017293a34b1c773faba260d4277d7067c97bf632c78cd5d62f5995b35cd4a493602a9f7840d961a8b0e32201071d544d7772d97c90edaa4fa7b219b8291f59d13bcfd3e275f1c84e18e35dc280e4524de98bc82c5b0756664f2dead345552ad68fef51c1472e5561461bd0659a4f9ecc58cfe63726e476448f0f1ba8e66aa9c5f3c36f13fc91d4d2aa02f712dba0d0d6dbc7892c64fc1e225f7474c82d8acceb9d88d594da98e9a1c14ae5a4dbf7eebd8f42588b4a089ce06191b8ba2189dab7f7ad39f5fd802266e4521cd8011be9b1c396ed7e867bc22df3716006f50eb9e323cad486014bdcdc3c3cb445c173085ae6c1f4f59010dc9782d9f188af35b8347f5113d59af016514642d207b53ea5cdea55d1e90b767a7e358dffd85c1ee8906d7b62629388224524fa4265095ba4ff4522a8c695553ccd897e636c60aece1fff270194c132de94b44888d481d98da8ca33063d165abd5000a85a03083809fb94ec286ea82e960f968ca6e607e1c3ae3f26621686d9e9b8e4e43fae159e68c89ab6921c155c2d7de177dcad11760887f6b72323ead290d3e740661662ba395b26c28b88406dd128080930133f8d78f6df7e57bba0025e8ef55dac118152223bcf8359b6f472431a2b37da68042f0b6fc3addabc0ebb61445fb22bbbfc5ab07bf21248c9d3fa05f62cbb61760265a90f1c426975d0e7574b046f884d8baf42e5bbe96c013e454acb83a8fa4b61bfef6c7692744d4a6a45250330a863de09494ae61f64901af372f8156380df617ca7470e3eccc31efd119484cf2ed0425b5b15bd4ad16b0a93b4143a655909ad58efa1694783ae934b96fc7e98
         run: |
           test "$LONG_SECRET" = "${{ needs.get_secrets.outputs.long_secret }}"
