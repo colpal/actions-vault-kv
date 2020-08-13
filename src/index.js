@@ -33,9 +33,9 @@ async function main() {
   }
 
   const paths = {};
-  for (const [path] of Object.values(userInput)) {
+  Object.values(userInput).forEach(([path]) => {
     paths[path] = null;
-  }
+  });
 
   try {
     const tokenReponse = await fetch(tokenOptions, loginBody);
@@ -56,15 +56,15 @@ async function main() {
       fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(res)}`);
     }
   }));
-  for (const response of responses) {
+  responses.forEach((response) => {
     paths[response.ACTUAL_PATH] = response.val.data.data;
-  }
+  });
 
   setValues(paths, userInput);
 }
 
 function setValues(paths, userInput) {
-  for (const [userKey, [path, secret]] of Object.entries(userInput)) {
+  Object.entries(userInput).forEach(([userKey, [path, secret]]) => {
     const response = paths[path];
 
     if (secret) {
@@ -72,7 +72,7 @@ function setValues(paths, userInput) {
     } else {
       core.setOutput(userKey, response);
     }
-  }
+  });
 }
 
 function fetch(options, data) {
