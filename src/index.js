@@ -24,7 +24,7 @@ const secretOptions = {
   },
 };
 
-async function main(request) {
+async function main() {
   let userInput;
   try {
     userInput = JSON.parse(core.getInput('secret-paths', { required: true }));
