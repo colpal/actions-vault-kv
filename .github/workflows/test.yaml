@@ -26,7 +26,6 @@ jobs:
           test "$LONG_SECRET" = "${{ needs.get_secrets.outputs.long_secret }}"
           test "USERNAME_VAL" = "${{ needs.get_secrets.outputs.usr }}"
           test "PASSWORD_VAL" = "${{ needs.get_secrets.outputs.pass }}"
-          test "99999" \
-               = "${{ fromJson(needs.get_secrets.outputs.id).ID_Number }}"
+          test "99999" = "${{ fromJson(steps.secret.outputs.id).ID_Number }}"
           test "rudra_desai@colpal.com" \
-               = "${{ fromJson(needs.get_secrets.outputs.id).email }}"
+               = "${{ fromJson(steps.secret.outputs.id).email }}"
