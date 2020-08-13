@@ -94,7 +94,7 @@ function fetch(options, data) {
             })
         })
         req.on('error', (error) => {
-            console.err(error)
+            console.error(error)
             reject({status: res.statusCode, err: error});
         })
         req.write(data)
