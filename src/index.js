@@ -24,6 +24,47 @@ const secretOptions = {
   },
 };
 
+function fail(message) {
+  core.setFailed(message);
+  process.exit(1);
+}
+
+function fetch(options, data) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      const body = [];
+      res.on('data', (d) => {
+        body.push(d);
+      });
+      res.on('end', () => {
+        const response = JSON.parse(body.join(''));
+        if (response.errors) {
+          reject({ status: res.statusCode, err: response });
+        }
+        resolve({ status: res.statusCode, val: response });
+      });
+    });
+    req.on('error', (error) => {
+      console.error(error);
+      reject({ status: res.statusCode, err: error });
+    });
+    req.write(data);
+    req.end();
+  });
+}
+
+function setValues(paths, userInput) {
+  Object.entries(userInput).forEach(([userKey, [path, secret]]) => {
+    const response = paths[path];
+
+    if (secret) {
+      core.setOutput(userKey, response[secret]);
+    } else {
+      core.setOutput(userKey, response);
+    }
+  });
+}
+
 async function main() {
   let userInput;
   try {
@@ -63,44 +104,4 @@ async function main() {
   setValues(paths, userInput);
 }
 
-function setValues(paths, userInput) {
-  Object.entries(userInput).forEach(([userKey, [path, secret]]) => {
-    const response = paths[path];
-
-    if (secret) {
-      core.setOutput(userKey, response[secret]);
-    } else {
-      core.setOutput(userKey, response);
-    }
-  });
-}
-
-function fetch(options, data) {
-  return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      const body = [];
-      res.on('data', (d) => {
-        body.push(d);
-      });
-      res.on('end', () => {
-        const response = JSON.parse(body.join(''));
-        if (response.errors) {
-          reject({ status: res.statusCode, err: response });
-        }
-        resolve({ status: res.statusCode, val: response });
-      });
-    });
-    req.on('error', (error) => {
-      console.error(error);
-      reject({ status: res.statusCode, err: error });
-    });
-    req.write(data);
-    req.end();
-  });
-}
-
-function fail(message) {
-  core.setFailed(message);
-  process.exit(1);
-}
 main();
