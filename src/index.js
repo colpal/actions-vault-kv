@@ -57,9 +57,9 @@ async function main() {
     fail(e, 'No basic connectivity could be established to Vault');
   }
 
-  let vaultToken;
+  let tokenResponse;
   try {
-    const tokenReponse = await client.request({
+    tokenResponse = await client.request({
       url: `${vaultAddress}/v1/auth/approle/login`,
       method: 'post',
       data: {
@@ -67,10 +67,11 @@ async function main() {
         secret_id: secretID,
       },
     });
-    vaultToken = tokenReponse.val.auth.client_token;
   } catch (e) {
     fail(e, 'Could not log you in, check your Role ID and Secret ID!');
   }
+  console.log(tokenResponse);
+  const vaultToken = tokenResponse.val.auth.client_token;
 
   const paths = {};
   Object.values(userInput).forEach(([path]) => {
