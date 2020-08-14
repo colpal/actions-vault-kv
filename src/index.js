@@ -92,7 +92,7 @@ async function main() {
     .keys(paths)
     .map(async (onePath) => {
       const [, capture] = onePath.match(regex);
-      const [secretError, response] = try$(client.request({
+      const [secretError, response] = await try$(client.request({
         url: `${vaultAddress}/v1/secret/data/${capture}`,
         method: 'get',
         headers: {
