@@ -19,6 +19,14 @@ function setValues(paths, userInput) {
   });
 }
 
+function maskValues(paths) {
+  Object.values(paths).forEach((secretObject) => {
+    Object.values(secretObject).forEach((secret) => {
+      core.setSecret(secret);
+    });
+  });
+}
+
 async function main() {
   const roleID = core.getInput('role-id', { required: true });
   const secretID = core.getInput('secret-id', { required: true });
@@ -100,6 +108,7 @@ async function main() {
     paths[response.ACTUAL_PATH] = response.data.data.data;
   });
 
+  maskValues(paths);
   console.log(paths);
   setValues(paths, userInput);
 }
