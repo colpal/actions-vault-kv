@@ -97,7 +97,7 @@ async function main() {
     });
   const responses = await Promise.all(promises);
   responses.forEach((response) => {
-    paths[response.ACTUAL_PATH] = response.data.data;
+    paths[response.ACTUAL_PATH] = response.data.data.data;
   });
 
   console.log(paths);
