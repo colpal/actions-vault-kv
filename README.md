@@ -1,5 +1,5 @@
 # actions-vault-kv
-A library to get credentials from HashiCorp Vault
+A library to easily get secrets from Hashicorp Vault within a Github Actions workflow.
 
 ## Usage
 
