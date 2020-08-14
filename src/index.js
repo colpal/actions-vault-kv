@@ -3,7 +3,7 @@ const { GoogleAuth } = require('google-auth-library');
 
 function fail(error, message) {
   console.error(message);
-  core.setFailed(error);
+  core.setFailed(error.toString());
   process.exit(1);
 }
 
