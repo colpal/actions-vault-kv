@@ -1,8 +1,9 @@
 const core = require('@actions/core');
 const { GoogleAuth } = require('google-auth-library');
 
-function fail(message) {
-  core.setFailed(message);
+function fail(error, message) {
+  console.error(message);
+  core.setFailed(error);
   process.exit(1);
 }
 
@@ -29,22 +30,22 @@ async function main() {
   let userInput;
   try {
     userInput = JSON.parse(secretPaths);
-  } catch (error) {
-    fail(`Could not parse your input for 'secret-paths'. Make sure 'secret-paths' is a valid JSON object\n${error}`);
+  } catch (e) {
+    fail(e, 'Could not parse your input for "secret-paths". Make sure "secret-paths" is a valid JSON object');
   }
 
   let credentials;
   try {
     credentials = JSON.parse(Buffer.from(serviceAccountKey, 'base64').toString('utf8'));
   } catch (e) {
-    fail(`Could not parse 'service-account-key' as JSON: ${e}`);
+    fail(e, 'Could not parse "service-account-key" as JSON');
   }
 
   let client;
   try {
     client = await (new GoogleAuth({ credentials })).getIdTokenClient(clientID);
   } catch (e) {
-    fail(`Could not create a valid Google Auth client: ${e}`);
+    fail(e, 'Could not create a valid Google Auth client');
   }
 
   let vaultToken;
@@ -59,7 +60,7 @@ async function main() {
     });
     vaultToken = tokenReponse.val.auth.client_token;
   } catch (e) {
-    fail(`Could not log you in, check your Role ID and Secret ID!\n${e}`);
+    fail(e, 'Could not log you in, check your Role ID and Secret ID!');
   }
 
   const paths = {};
@@ -81,8 +82,8 @@ async function main() {
           },
         });
         return { ...response, ACTUAL_PATH: onePath };
-      } catch (res) {
-        return fail(`Could not open: ${onePath}. Check that the path is valid.\n${JSON.stringify(res)}`);
+      } catch (e) {
+        return fail(e, `Could not open: ${onePath}. Check that the path is valid`);
       }
     });
   const responses = await Promise.all(promises);
