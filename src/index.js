@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const { GoogleAuth } = require('google-auth-library');
 
 function fail(error, message) {
-  console.error(JSON.stringify(error, null, 2));
+  core.error(error);
   core.setFailed(message);
   process.exit(1);
 }
