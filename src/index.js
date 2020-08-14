@@ -109,7 +109,6 @@ async function main() {
   });
 
   maskValues(paths);
-  console.log(paths);
   setValues(paths, userInput);
 }
 
