@@ -48,6 +48,15 @@ async function main() {
     fail(e, 'Could not create a valid Google Auth client');
   }
 
+  try {
+    await client.request({
+      url: `${vaultAddress}/v1/sys/health`,
+      method: 'get',
+    });
+  } catch (e) {
+    fail(e, 'No basic connectivity could be established to Vault');
+  }
+
   let vaultToken;
   try {
     const tokenReponse = await client.request({
