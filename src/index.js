@@ -100,6 +100,7 @@ async function main() {
     paths[response.ACTUAL_PATH] = response.data.data;
   });
 
+  console.log(paths);
   setValues(paths, userInput);
 }
 
