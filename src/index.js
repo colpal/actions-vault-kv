@@ -7,6 +7,21 @@ function fail(error, message) {
   process.exit(1);
 }
 
+function try$ (a) {
+  if (a instanceof Function) {
+    try {
+      return [null, a()];
+    } catch (err) {
+      return [err, null];
+    }
+  } else if (a instanceof Promise) {
+    return a
+      .then((x) => [null, x])
+      .catch((err) => [err, null]);
+  }
+  return ['try$ was not invoked with an eligible argument', null];
+}
+
 function setValues(paths, userInput) {
   Object.entries(userInput).forEach(([userKey, [path, secret]]) => {
     const response = paths[path];
@@ -35,73 +50,58 @@ async function main() {
   const vaultAddress = core.getInput('vault-address');
   const clientID = core.getInput('iap-client-id');
 
-  let userInput;
-  try {
-    userInput = JSON.parse(secretPaths);
-  } catch (e) {
-    fail(e, 'Could not parse your input for "secret-paths". Make sure "secret-paths" is a valid JSON object');
-  }
+  const [pathParseError, userInput] = try$(() => JSON.parse(secretPaths));
+  if (pathParseError) fail(pathParseError, 'Could not parse your input for "secret-paths". Make sure "secret-paths" is a valid JSON object');
 
-  let credentials;
-  try {
-    credentials = JSON.parse(Buffer.from(serviceAccountKey, 'base64').toString('utf8'));
-  } catch (e) {
-    fail(e, 'Could not parse "service-account-key" as JSON');
-  }
+  const [decodeError, buffer] = try$(() => Buffer.from(serviceAccountKey, 'base64'));
+  if (decodeError) fail(decodeError, 'The "service-account-key" was not recognized as base64');
 
-  let client;
-  try {
-    client = await (new GoogleAuth({ credentials })).getIdTokenClient(clientID);
-  } catch (e) {
-    fail(e, 'Could not create a valid Google Auth client');
-  }
+  const [keyParseError, credentials] = try$(() => JSON.parse(buffer.toString('utf8')));
+  if (keyParseError) fail(keyParseError, 'Could not parse "service-account-key" as JSON');
 
-  try {
-    await client.request({
-      url: `${vaultAddress}/v1/sys/health`,
-      method: 'get',
-    });
-  } catch (e) {
-    fail(e, 'No basic connectivity could be established to Vault');
-  }
+  const [iapError, client] = await try$(
+    (new GoogleAuth({ credentials })).getIdTokenClient(clientID),
+  );
+  if (iapError) fail(iapError, 'Could not create a valid Google Auth client');
 
-  let tokenResponse;
-  try {
-    tokenResponse = await client.request({
-      url: `${vaultAddress}/v1/auth/approle/login`,
-      method: 'post',
-      data: {
-        role_id: roleID,
-        secret_id: secretID,
-      },
-    });
-  } catch (e) {
-    fail(e, 'Could not log you in, check your Role ID and Secret ID!');
-  }
-  const vaultToken = tokenResponse.data.auth.client_token;
+  const [connectError] = await try$(client.request({
+    url: `${vaultAddress}/v1/sys/health`,
+    method: 'get',
+  }));
+  if (connectError) fail(connectError, 'No basic connectivity could be established to Vault');
+
+  const [loginError, tokenResponse] = await try$(client.request({
+    url: `${vaultAddress}/v1/auth/approle/login`,
+    method: 'post',
+    data: {
+      role_id: roleID,
+      secret_id: secretID,
+    },
+  }));
+  if (loginError) fail(loginError, 'Could not log you in, check your Role ID and Secret ID!');
+
+  const [tokenPathError, vaultToken] = try$(() => tokenResponse.data.auth.client_token);
+  if (tokenPathError) fail(tokenPathError, 'Token could not be found in login response');
 
   const paths = {};
   Object.values(userInput).forEach(([path]) => {
     paths[path] = null;
   });
-
   const regex = /\/?secret\/(.*)/;
   const promises = Object
     .keys(paths)
     .map(async (onePath) => {
       const [, capture] = onePath.match(regex);
-      try {
-        const response = await client.request({
-          url: `${vaultAddress}/v1/secret/data/${capture}`,
-          method: 'get',
-          headers: {
-            'X-Vault-Token': vaultToken,
-          },
-        });
-        return { ...response, ACTUAL_PATH: onePath };
-      } catch (e) {
-        return fail(e, `Could not open: ${onePath}. Check that the path is valid`);
-      }
+      const [secretError, response] = try$(client.request({
+        url: `${vaultAddress}/v1/secret/data/${capture}`,
+        method: 'get',
+        headers: {
+          'X-Vault-Token': vaultToken,
+        },
+      }));
+      if (secretError) fail(secretError, `Could not open: ${onePath}. Check that the path is valid`);
+
+      return { ...response, ACTUAL_PATH: onePath };
     });
   const responses = await Promise.all(promises);
   responses.forEach((response) => {
