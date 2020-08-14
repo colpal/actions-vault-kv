@@ -58,8 +58,8 @@ async function main() {
       },
     });
     vaultToken = tokenReponse.val.auth.client_token;
-  } catch (res) {
-    fail(`Could not log you in, check your Role ID and Secret ID!\n${res.err.errors}`);
+  } catch (e) {
+    fail(`Could not log you in, check your Role ID and Secret ID!\n${e}`);
   }
 
   const paths = {};
