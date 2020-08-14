@@ -11,7 +11,7 @@ inputs:
   secret-paths:
     description: 'path to secret'
     required: true
-  service_account_key:
+  service-account-key:
     description: Base64 encoded, JSON formatted service account key file
     required: true
   vault-address:
