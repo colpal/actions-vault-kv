@@ -6,7 +6,7 @@ A library to get credentials from HashiCorp Vault
 ```yaml
 steps:
   - id: 'vault'
-    uses: 'colpal/actions-vault-kv@v1'
+    uses: 'colpal/actions-vault-kv@v2'
     with:
       # Together, the role-id and secret-id allow you to login to Vault, and determine what secrets
       # you can access. You receive both of them when you submit a pull request on the colpal/vault
