@@ -70,8 +70,7 @@ async function main() {
   } catch (e) {
     fail(e, 'Could not log you in, check your Role ID and Secret ID!');
   }
-  console.log(tokenResponse);
-  const vaultToken = tokenResponse.val.auth.client_token;
+  const vaultToken = tokenResponse.data.auth.client_token;
 
   const paths = {};
   Object.values(userInput).forEach(([path]) => {
