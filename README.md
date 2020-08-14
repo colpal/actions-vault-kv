@@ -41,12 +41,12 @@ steps:
   - run: 'echo "$DATABASE_USERNAME:$DATABASE_PASSWORD" > db-basic-auth.txt'
     env:
       # Note we have to parse the output as JSON before we can access the fields
-      DATABASE_USERNAME: "${{ fromJson(steps.vault.outputs.database).username }}"
-      DATABASE_PASSWORD: "${{ fromJson(steps.vault.outputs.database).password }}"
+      DATABASE_USERNAME: '${{ fromJson(steps.vault.outputs.database).username }}'
+      DATABASE_PASSWORD: '${{ fromJson(steps.vault.outputs.database).password }}'
 
   # Here is an example of using the single secret output option
   - run: 'echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa'
     env:
       # Note we are using the output directly here
-      SSH_PRIVATE_KEY: "${{ steps.vault.outputs.privateKey }}"
+      SSH_PRIVATE_KEY: '${{ steps.vault.outputs.privateKey }}'
 ```
