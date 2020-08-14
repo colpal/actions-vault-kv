@@ -1,11 +1,11 @@
 {
   "name": "actions-vault-kv",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "@actions/github": "^4.0.0"
+    "google-auth-library": "^6.0.6"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
