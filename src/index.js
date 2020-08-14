@@ -7,7 +7,7 @@ function fail(error, message) {
   process.exit(1);
 }
 
-function try$ (a) {
+function try$(a) {
   if (a instanceof Function) {
     try {
       return [null, a()];
