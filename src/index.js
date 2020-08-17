@@ -1,12 +1,6 @@
 const core = require('@actions/core');
 const { GoogleAuth } = require('google-auth-library');
 
-function fail(error, message) {
-  core.error(error);
-  core.setFailed(message);
-  process.exit(1);
-}
-
 function try$(a) {
   if (a instanceof Function) {
     try {
@@ -20,6 +14,13 @@ function try$(a) {
       .catch((err) => [err, null]);
   }
   return ['try$ was not invoked with an eligible argument', null];
+}
+
+function fail(error, message) {
+  const [stringifyError, prettyJSON] = try$(() => JSON.stringify(error, null, 2));
+  core.error(stringifyError ? error : prettyJSON);
+  core.setFailed(message);
+  process.exit(1);
 }
 
 function setValues(paths, userInput) {
