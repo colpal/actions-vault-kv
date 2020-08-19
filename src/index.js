@@ -44,12 +44,21 @@ function maskValues(paths) {
 }
 
 async function main() {
-  const roleID = core.getInput('role-id', { required: true });
-  const secretID = core.getInput('secret-id', { required: true });
-  const secretPaths = core.getInput('secret-paths', { required: true });
-  const serviceAccountKey = core.getInput('service-account-key', { required: true });
   const vaultAddress = core.getInput('vault-address');
   const clientID = core.getInput('iap-client-id');
+
+  let roleID;
+  let secretID;
+  let secretPaths;
+  let serviceAccountKey;
+  try {
+    roleID = core.getInput('role-id', { required: true });
+    secretID = core.getInput('secret-id', { required: true });
+    secretPaths = core.getInput('secret-paths', { required: true });
+    serviceAccountKey = core.getInput('service-account-key', { required: true });
+  } catch (e) {
+    core.setFailed(e);
+  }
 
   const [pathParseError, userInput] = try$(() => JSON.parse(secretPaths));
   if (pathParseError) fail(pathParseError, 'Could not parse your input for "secret-paths". Make sure "secret-paths" is a valid JSON object');
