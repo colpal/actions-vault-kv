@@ -74,6 +74,10 @@ async function main() {
   );
   if (iapError) fail(iapError, 'Could not create a valid Google Auth client');
 
+  const [headerErrors, headers] = await try$(client.getRequestHeaders(vaultAddress));
+  if (headerErrors) fail(headerErrors, 'Could not grab headers to mask IAP Bearer token');
+  core.setSecret(headers.Authorization);
+
   const [connectError] = await try$(client.request({
     url: `${vaultAddress}/v1/sys/health`,
     method: 'get',
@@ -92,6 +96,7 @@ async function main() {
 
   const [tokenPathError, vaultToken] = try$(() => tokenResponse.data.auth.client_token);
   if (tokenPathError) fail(tokenPathError, 'Token could not be found in login response');
+  core.setSecret(vaultToken);
 
   const paths = {};
   Object.values(userInput).forEach(([path]) => {
