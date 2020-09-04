@@ -73,6 +73,7 @@ async function main() {
     (new GoogleAuth({ credentials })).getIdTokenClient(clientID),
   );
   if (iapError) fail(iapError, 'Could not create a valid Google Auth client');
+  core.setSecret(client.credentials.id_token);
 
   const [connectError] = await try$(client.request({
     url: `${vaultAddress}/v1/sys/health`,
