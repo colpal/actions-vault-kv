@@ -76,7 +76,7 @@ async function main() {
 
   const [headerErrors, headers] = await try$(client.getRequestHeaders(vaultAddress));
   if (headerErrors) fail(headerErrors, 'Could not grab headers to mask IAP Bearer token');
-  console.log(headers);
+  core.setSecret(headers.Authorization);
 
   const [connectError] = await try$(client.request({
     url: `${vaultAddress}/v1/sys/health`,
