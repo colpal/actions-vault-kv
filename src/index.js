@@ -92,6 +92,7 @@ async function main() {
 
   const [tokenPathError, vaultToken] = try$(() => tokenResponse.data.auth.client_token);
   if (tokenPathError) fail(tokenPathError, 'Token could not be found in login response');
+  core.setSecret(vaultToken);
 
   const paths = {};
   Object.values(userInput).forEach(([path]) => {
