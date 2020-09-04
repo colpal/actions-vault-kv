@@ -73,7 +73,10 @@ async function main() {
     (new GoogleAuth({ credentials })).getIdTokenClient(clientID),
   );
   if (iapError) fail(iapError, 'Could not create a valid Google Auth client');
-  core.setSecret(client.credentials.id_token);
+
+  const [headerErrors, headers] = await try$(client.getRequestHeaders(vaultAddress));
+  if (headerErrors) fail(headerErrors, 'Could not grab headers to mask IAP Bearer token');
+  console.log(headers);
 
   const [connectError] = await try$(client.request({
     url: `${vaultAddress}/v1/sys/health`,
